@@ -4,11 +4,11 @@ use dev_TeaWIKI;
 
 CREATE TABLE users (
     user_id    INT          AUTO_INCREMENT PRIMARY KEY,
-    username   VARCHAR(50)  NOT NULL UNIQUE,
+    username   VARCHAR(32)  NOT NULL UNIQUE,
     avatar     VARCHAR(255),
-    department VARCHAR(100),
-    password   VARCHAR(255) NOT NULL,
-    salt       VARCHAR(32)  NOT NULL,
+    department VARCHAR(32),
+    password   CHAR(64)     NOT NULL,
+    salt       CHAR(32)     NOT NULL,
     created_at DATETIME     DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted    TINYINT      DEFAULT 0
@@ -16,8 +16,8 @@ CREATE TABLE users (
 
 CREATE TABLE teachers (
     teacher_id   INT AUTO_INCREMENT PRIMARY KEY,
-    teacher_name VARCHAR(100) NOT NULL,
-    department   VARCHAR(100),
+    teacher_name VARCHAR(32) NOT NULL,
+    department   VARCHAR(32),
     created_at   DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at   DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted      TINYINT  DEFAULT 0
@@ -53,9 +53,9 @@ CREATE TABLE comment_votes (
 
 CREATE TABLE courses (
     course_id   INT          AUTO_INCREMENT PRIMARY KEY,
-    course_name VARCHAR(200) NOT NULL,
-    course_type VARCHAR(50),
-    department  VARCHAR(100),
+    course_name VARCHAR(32) NOT NULL,
+    course_type VARCHAR(32),
+    department  VARCHAR(32),
     created_at  DATETIME     DEFAULT CURRENT_TIMESTAMP,
     updated_at  DATETIME     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted     TINYINT      DEFAULT 0
