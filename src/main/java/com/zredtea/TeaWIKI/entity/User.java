@@ -14,6 +14,9 @@ public class User {
     @TableField("username")
     private String username;
 
+    @TableField("nickname")
+    private String nickname;
+
     @TableField("avatar")
     private String avatar;
 

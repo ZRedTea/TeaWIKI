@@ -5,6 +5,7 @@ use dev_TeaWIKI;
 CREATE TABLE users (
     user_id    INT          AUTO_INCREMENT PRIMARY KEY,
     username   VARCHAR(32)  NOT NULL UNIQUE,
+    nickname   VARCHAR(64)  NOT NULL,
     avatar     VARCHAR(255),
     department VARCHAR(32),
     password   CHAR(64)     NOT NULL,
