@@ -7,6 +7,7 @@ import com.zredtea.TeaWIKI.DTO.request.PasswordUpdateDTO;
 import com.zredtea.TeaWIKI.DTO.request.RegisterDTO;
 import com.zredtea.TeaWIKI.DTO.response.UserDTO;
 import com.zredtea.TeaWIKI.entity.User;
+import org.springframework.stereotype.Service;
 
 public interface UserService extends IService<User> {
     UserDTO register(RegisterDTO dto);

@@ -10,7 +10,7 @@ import com.zredtea.TeaWIKI.DTO.request.RegisterDTO;
 @TableName("users")
 public class User {
 
-    @TableId(type = IdType.AUTO)
+    @TableId(value="user_id",type = IdType.AUTO)
     private Integer userId;
 
     @TableField("username")

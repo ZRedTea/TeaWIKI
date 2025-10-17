@@ -18,7 +18,7 @@ public class FileUploadUtil {
     private static final Logger log = LoggerFactory.getLogger(FileUploadUtil.class);
 
     @Value("${file.upload.path}")
-    private String uploadPath;
+    private static String uploadPath;
 
     /**
      * 上传头像文件
@@ -54,7 +54,7 @@ public class FileUploadUtil {
     /**
      * 获取文件扩展名
      */
-    private String getFileExtension(String filename) {
+    private static String getFileExtension(String filename) {
         if (filename != null && filename.contains(".")) {
             return filename.substring(filename.lastIndexOf(".") + 1);
         }
@@ -66,7 +66,7 @@ public class FileUploadUtil {
      * @param originalFilename 源文件名
      * @return
      */
-    private String generateFileName(String originalFilename) {
+    private static String generateFileName(String originalFilename) {
         String fileExtension = getFileExtension(originalFilename);
         return IdUtil.simpleUUID() + "." + fileExtension;
     }

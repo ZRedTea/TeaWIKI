@@ -20,5 +20,4 @@ public class RegisterDTO {
 
     @Size(max = 16, message = "学院必须小于16个字符")
     private String department;
-    private String avatar;
 }

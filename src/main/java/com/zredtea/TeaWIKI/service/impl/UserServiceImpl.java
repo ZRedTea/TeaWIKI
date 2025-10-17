@@ -27,6 +27,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         } else {
             user.setNickname(dto.getUsername());
         }
+
+
         user.setSalt(salt);
         user.setPassword(SaltUtil.getPasswordCrypto(dto.getPassword(), salt));
 

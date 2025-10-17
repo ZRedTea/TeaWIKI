@@ -10,6 +10,7 @@ public class TransUtil {
     public static UserDTO User2UserInfoDTO(User user, Integer statuCode){
         UserDTO userDTO = new UserDTO();
         userDTO.setStatusCode(statuCode);
+        userDTO.setUserId(user.getUserId());
         userDTO.setUsername(user.getUsername());
         userDTO.setNickname(user.getNickname());
         userDTO.setAvatar(user.getAvatar());
@@ -20,12 +21,11 @@ public class TransUtil {
         return userDTO;
     }
 
-    public static User RegisterDTO2User(RegisterDTO userDTO) {
+    public static User RegisterDTO2User(RegisterDTO registerDTO) {
         User user = new User();
-        user.setUsername(userDTO.getUsername());
-        user.setNickname(userDTO.getNickname());
-        user.setAvatar(userDTO.getAvatar());
-        user.setDepartment(userDTO.getDepartment());
+        user.setUsername(registerDTO.getUsername());
+        user.setNickname(registerDTO.getNickname());
+        user.setDepartment(registerDTO.getDepartment());
         user.setCreatedAt(new Date());
         user.setUpdatedAt(new Date());
         return user;
