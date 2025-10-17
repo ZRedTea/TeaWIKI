@@ -16,6 +16,11 @@ public interface UserMapper extends BaseMapper<User> {
     User SelectByUsername(@Param("username") String username);
 
     /*
+    *** 根据用户编号查找用户
+     */
+    User SelectByUserId(@Param("userid")  Integer userid);
+
+    /*
     *** 根据用户名检查用户是否存在
      */
     Integer CheckByUsername(@Param("username") String username);

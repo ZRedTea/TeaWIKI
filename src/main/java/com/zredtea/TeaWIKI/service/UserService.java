@@ -3,16 +3,23 @@ package com.zredtea.TeaWIKI.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import com.zredtea.TeaWIKI.DTO.request.LoginDTO;
+import com.zredtea.TeaWIKI.DTO.request.PasswordUpdateDTO;
 import com.zredtea.TeaWIKI.DTO.request.RegisterDTO;
-import com.zredtea.TeaWIKI.DTO.response.UserInfoDTO;
+import com.zredtea.TeaWIKI.DTO.response.UserDTO;
 import com.zredtea.TeaWIKI.entity.User;
 
 public interface UserService extends IService<User> {
-    UserInfoDTO register(RegisterDTO registerDTO);
+    UserDTO register(RegisterDTO dto);
 
-    String login(LoginDTO loginDTO);
+    UserDTO login(LoginDTO dto);
 
-    UserInfoDTO getUserInfo(String username);
+    UserDTO getUserInfo(String username);
+
+    UserDTO updateNickname(String username, String nickname);
+
+    UserDTO updateAvatar(String username, String avatar);
+
+    UserDTO updatePassword(String username, PasswordUpdateDTO dto);
 
     Boolean isUserExist(String username);
 }

@@ -46,3 +46,9 @@ logging:
     com.zredtea.TeaWIKI.mapper: debug
   pattern:
     console: '%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{50} - %msg%n'
+
+# 文件上传配置
+file:
+  upload:
+    path: D:/upload/avatar
+    access: /avatar/**

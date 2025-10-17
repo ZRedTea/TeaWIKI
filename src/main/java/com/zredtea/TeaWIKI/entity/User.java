@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import java.util.Date;
 
+import com.zredtea.TeaWIKI.DTO.request.RegisterDTO;
+
 @Data
 @TableName("users")
 public class User {

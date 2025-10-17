@@ -4,7 +4,9 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class UserInfoDTO {
+public class UserDTO {
+    private Integer statusCode;
+
     private Integer userId;
     private String username;
     private String nickname;
