@@ -89,7 +89,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             String newSalt =  SaltUtil.getSalt();
             String newPassword =  SaltUtil.getPasswordCrypto(dto.getNewPassword(), newSalt);
             user.setPassword(newPassword);
-            user.setSalt(salt);
+            user.setSalt(newSalt);
             userMapper.updateById(user);
             return TransUtil.User2UserInfoDTO(user,200);
         } else {
