@@ -26,6 +26,11 @@ public interface UserMapper extends BaseMapper<User> {
     Integer CheckByUsername(@Param("username") String username);
 
     /**
+    *** 根据用户名返回用户编号
+     */
+    Integer SelectIdByUsername(@Param("username") String username);
+
+    /**
     *** 返回所有用户列表
      */
     List<User> SelectAllUsers();
