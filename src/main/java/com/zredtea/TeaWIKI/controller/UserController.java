@@ -1,9 +1,9 @@
 package com.zredtea.TeaWIKI.controller;
 
 import com.zredtea.TeaWIKI.DTO.Result;
-import com.zredtea.TeaWIKI.DTO.request.LoginDTO;
-import com.zredtea.TeaWIKI.DTO.request.PasswordUpdateDTO;
-import com.zredtea.TeaWIKI.DTO.request.RegisterDTO;
+import com.zredtea.TeaWIKI.DTO.request.UserLoginDTO;
+import com.zredtea.TeaWIKI.DTO.request.UserPasswordUpdateDTO;
+import com.zredtea.TeaWIKI.DTO.request.UserRegisterDTO;
 import com.zredtea.TeaWIKI.DTO.response.UserDTO;
 import com.zredtea.TeaWIKI.service.UserService;
 import com.zredtea.TeaWIKI.util.FileUploadUtil;
@@ -23,7 +23,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public Result<UserDTO> register(@RequestBody @Valid RegisterDTO dto) {
+    public Result<UserDTO> register(@RequestBody @Valid UserRegisterDTO dto) {
         if (userService.isUserExist(dto.getUsername())) {
             return Result.error(400, "用户已存在");
         }
@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Result<UserDTO> login(@RequestBody @Valid LoginDTO dto) {
+    public Result<UserDTO> login(@RequestBody @Valid UserLoginDTO dto) {
         if (!userService.isUserExist(dto.getUsername())) {
             return Result.error(400, "用户不存在");
         }
@@ -73,7 +73,7 @@ public class UserController {
 
     @PutMapping("/{username}/password")
     public Result<UserDTO> updatePassword(@PathVariable String username,
-                                          @RequestBody @Valid PasswordUpdateDTO dto) {
+                                          @RequestBody @Valid UserPasswordUpdateDTO dto) {
         if (!userService.isUserExist(username)) {
             return Result.error(400,"用户不存在");
         }

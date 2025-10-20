@@ -25,4 +25,8 @@ public class GlobalExceptionHandler {
         log.error("系统异常：", e);
         return Result.error(500, "系统内部错误，请联系管理员解决");
     }
+
+    /**
+     *
+     */
 }

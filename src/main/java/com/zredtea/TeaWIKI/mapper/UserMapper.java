@@ -33,7 +33,7 @@ public interface UserMapper extends BaseMapper<User> {
      */
     default Boolean checkByUserId(Integer userid) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getUsername, userid);
+        wrapper.eq(User::getUserId, userid);
         return selectOne(wrapper) != null;
     }
 

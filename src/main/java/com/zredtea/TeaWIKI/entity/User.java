@@ -2,9 +2,8 @@ package com.zredtea.TeaWIKI.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
-import java.util.Date;
 
-import com.zredtea.TeaWIKI.DTO.request.RegisterDTO;
+import java.time.LocalDateTime;
 
 @Data
 @TableName("users")
@@ -32,10 +31,10 @@ public class User {
     private String salt;
 
     @TableField(value = "created_at", fill = FieldFill.INSERT)
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @TableField(value = "updated_at", fill = FieldFill.INSERT_UPDATE)
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
     @TableLogic
     @TableField("deleted")

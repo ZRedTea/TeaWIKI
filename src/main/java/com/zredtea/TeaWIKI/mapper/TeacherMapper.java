@@ -21,6 +21,14 @@ public interface TeacherMapper extends BaseMapper<Teacher> {
     }
 
     /**
+     * 获得教师列表
+     */
+    default List<Teacher> selectAllTeacher() {
+        LambdaQueryWrapper<Teacher> wrapper = new LambdaQueryWrapper<>();
+        return selectList(wrapper);
+    }
+
+    /**
      * 使用教师名进行模糊查询
      */
     default List<Teacher> matchByTeacherName(String teacherName){

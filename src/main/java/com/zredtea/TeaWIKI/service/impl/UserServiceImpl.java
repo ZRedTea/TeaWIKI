@@ -1,9 +1,9 @@
 package com.zredtea.TeaWIKI.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.zredtea.TeaWIKI.DTO.request.LoginDTO;
-import com.zredtea.TeaWIKI.DTO.request.PasswordUpdateDTO;
-import com.zredtea.TeaWIKI.DTO.request.RegisterDTO;
+import com.zredtea.TeaWIKI.DTO.request.UserLoginDTO;
+import com.zredtea.TeaWIKI.DTO.request.UserPasswordUpdateDTO;
+import com.zredtea.TeaWIKI.DTO.request.UserRegisterDTO;
 import com.zredtea.TeaWIKI.DTO.response.UserDTO;
 import com.zredtea.TeaWIKI.entity.User;
 import com.zredtea.TeaWIKI.service.UserService;
@@ -19,7 +19,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
                              implements UserService {
 
     @Override
-    public UserDTO register(RegisterDTO dto) {
+    public UserDTO register(UserRegisterDTO dto) {
         User user = TransUtil.RegisterDTO2User(dto);
         String salt = SaltUtil.getSalt();
         user.setUsername(dto.getUsername());
@@ -40,7 +40,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public UserDTO login(LoginDTO dto) {
+    public UserDTO login(UserLoginDTO dto) {
         UserMapper userMapper = getBaseMapper();
         User user = userMapper.selectByUsername(dto.getUsername());
         String passwordInput = dto.getPassword();
@@ -85,7 +85,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public UserDTO updatePassword(String username, PasswordUpdateDTO dto) {
+    public UserDTO updatePassword(String username, UserPasswordUpdateDTO dto) {
         UserMapper userMapper = getBaseMapper();
         User user = userMapper.selectByUsername(username);
         String salt = user.getSalt();

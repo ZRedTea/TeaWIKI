@@ -1,12 +1,15 @@
 package com.zredtea.TeaWIKI.util;
 
-import com.zredtea.TeaWIKI.DTO.request.RegisterDTO;
+import com.zredtea.TeaWIKI.DTO.request.UserRegisterDTO;
 import com.zredtea.TeaWIKI.DTO.response.TeacherDTO;
 import com.zredtea.TeaWIKI.DTO.response.UserDTO;
 import com.zredtea.TeaWIKI.entity.Teacher;
 import com.zredtea.TeaWIKI.entity.User;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class TransUtil {
     public static UserDTO User2UserInfoDTO(User user){
@@ -32,14 +35,22 @@ public class TransUtil {
         return teacherDTO;
     }
 
+    public static List<TeacherDTO> teacher2TeacherDTO(List<Teacher> teacherList){
+        List<TeacherDTO> teacherDTOList = new ArrayList<>();
+        for(Teacher teacher : teacherList){
+            teacherDTOList.add(teacher2TeacherDTO(teacher));
+        }
+        return teacherDTOList;
+    }
 
-    public static User RegisterDTO2User(RegisterDTO registerDTO) {
+
+    public static User RegisterDTO2User(UserRegisterDTO userRegisterDTO) {
         User user = new User();
-        user.setUsername(registerDTO.getUsername());
-        user.setNickname(registerDTO.getNickname());
-        user.setDepartment(registerDTO.getDepartment());
-        user.setCreatedAt(new Date());
-        user.setUpdatedAt(new Date());
+        user.setUsername(userRegisterDTO.getUsername());
+        user.setNickname(userRegisterDTO.getNickname());
+        user.setDepartment(userRegisterDTO.getDepartment());
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
         return user;
     }
 }

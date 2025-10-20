@@ -1,6 +1,8 @@
 package com.zredtea.TeaWIKI.DTO.response;
 
 import lombok.Data;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -10,6 +12,6 @@ public class UserDTO {
     private String nickname;
     private String avatar;
     private String department;
-    private Date createdAt;
-    private Date updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
