@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -22,93 +24,64 @@ public class UserController {
 
     @PostMapping("/register")
     public Result<UserDTO> register(@RequestBody @Valid RegisterDTO dto) {
-        try {
-            if (userService.isUserExist(dto.getUsername())) {
-                return Result.error(400, "用户已存在");
-            }
-            UserDTO result = userService.register(dto);
-            return Result.success(result);
-        } catch (Exception e) {
-            return Result.error(500, e.getMessage());
+        if (userService.isUserExist(dto.getUsername())) {
+            return Result.error(400, "用户已存在");
         }
+        UserDTO result = userService.register(dto);
+        return Result.success(result);
     }
 
     @PostMapping("/login")
     public Result<UserDTO> login(@RequestBody @Valid LoginDTO dto) {
-        try {
-            if (!userService.isUserExist(dto.getUsername())) {
-                return Result.error(400, "用户不存在");
-            }
-            UserDTO result = userService.login(dto);
-            if (result.getStatusCode() == 200) {
-                return Result.success(result);
-            } else {
-                return Result.error(400, "用户名或密码错误");
-            }
-        } catch (Exception e) {
-            return Result.error(500, e.getMessage());
+        if (!userService.isUserExist(dto.getUsername())) {
+            return Result.error(400, "用户不存在");
         }
+        UserDTO result = userService.login(dto);
+        return Result.success(result);
     }
 
     @RequestMapping("/{username}")
     public Result<UserDTO> getUserInfo(@PathVariable String username) {
-        try {
-            if (!userService.isUserExist(username)) {
-                return Result.error(400, "用户不存在");
-            }
-            UserDTO result = userService.getUserInfo(username);
-            return Result.success(result);
-        } catch (Exception e) {
-            return Result.error(500, e.getMessage());
+        if (!userService.isUserExist(username)) {
+            return Result.error(400, "用户不存在");
         }
+        UserDTO result = userService.getUserInfo(username);
+        return Result.success(result);
     }
 
-    @PostMapping("/{username}/nickname")
+    @PutMapping("/{username}/nickname")
     public Result<UserDTO> updateNickname(@PathVariable String username,
                                           @RequestParam("nickname") String nickname) {
-        try {
-            if (!userService.isUserExist(username)) {
-                return Result.error(400, "用户不存在");
-            }
-            UserDTO result = userService.updateNickname(username, nickname);
-            return Result.success(result);
-        } catch (Exception e) {
-            return Result.error(500, e.getMessage());
+        if (!userService.isUserExist(username)) {
+            return Result.error(400, "用户不存在");
         }
+        UserDTO result = userService.updateNickname(username, nickname);
+        return Result.success(result);
     }
 
-    @PostMapping("/{username}/avatar")
+    @PutMapping("/{username}/avatar")
     public Result<UserDTO> updateAvatar(@PathVariable String username,
-                                        @RequestParam("avatar") MultipartFile avatar) {
-        try {
-            if (!userService.isUserExist(username)) {
-                return Result.error(400,"用户不存在");
-            }
-            String avatarURL = FileUploadUtil.uploadAvatar(avatar);
-            UserDTO result = userService.updateAvatar(username, avatarURL);
-            return Result.success(result);
-        } catch (Exception e) {
-            return Result.error(500, e.getMessage());
+                                        @RequestParam("avatar") MultipartFile avatar)
+                                        throws IOException {
+        if (!userService.isUserExist(username)) {
+            return Result.error(400,"用户不存在");
         }
+        String avatarURL = FileUploadUtil.uploadAvatar(avatar);
+        UserDTO result = userService.updateAvatar(username, avatarURL);
+        return Result.success(result);
     }
 
-    @PostMapping("/{username}/password")
+    @PutMapping("/{username}/password")
     public Result<UserDTO> updatePassword(@PathVariable String username,
                                           @RequestBody @Valid PasswordUpdateDTO dto) {
-        try {
-            if (!userService.isUserExist(username)) {
-                return Result.error(400,"用户不存在");
-            }
-            if (!dto.getOldPassword().equals(dto.getNewPassword())) {
-                UserDTO result = userService.updatePassword(username, dto);
-                return Result.success(result);
-            } else {
-                return Result.error(400,"旧密码与新密码不能相同");
-            }
-        } catch (RuntimeException e) {
-            return Result.error(400, e.getMessage());
-        } catch (Exception e) {
-            return Result.error(500, e.getMessage());
+        if (!userService.isUserExist(username)) {
+            return Result.error(400,"用户不存在");
+        }
+        if (!dto.getOldPassword().equals(dto.getNewPassword())) {
+            UserDTO result = userService.updatePassword(username, dto);
+            return Result.success(result);
+        } else {
+            return Result.error(400,"旧密码与新密码不能相同");
         }
     }
 }

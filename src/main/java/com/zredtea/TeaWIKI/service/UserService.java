@@ -22,5 +22,7 @@ public interface UserService extends IService<User> {
 
     UserDTO updatePassword(String username, PasswordUpdateDTO dto);
 
+    Boolean isUserExist(Integer userId);
+
     Boolean isUserExist(String username);
 }

@@ -11,6 +11,7 @@ import com.zredtea.TeaWIKI.service.UserService;
 import com.zredtea.TeaWIKI.mapper.UserMapper;
 import com.zredtea.TeaWIKI.util.SaltUtil;
 import com.zredtea.TeaWIKI.util.TransUtil;
+import net.sf.jsqlparser.util.validation.metadata.DatabaseException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,79 +29,92 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             user.setNickname(dto.getUsername());
         }
 
-
         user.setSalt(salt);
         user.setPassword(SaltUtil.getPasswordCrypto(dto.getPassword(), salt));
 
         boolean success = super.save(user);
         if(!success) {
-            throw new RuntimeException("注册时发生错误");
+            throw new DatabaseException("数据库操作时发生错误");
         }
-
-        return TransUtil.User2UserInfoDTO(user,200);
+        return TransUtil.User2UserInfoDTO(user);
     }
 
     @Override
     public UserDTO login(LoginDTO dto) {
         UserMapper userMapper = getBaseMapper();
-        User user = userMapper.SelectByUsername(dto.getUsername());
+        User user = userMapper.selectByUsername(dto.getUsername());
         String passwordInput = dto.getPassword();
         passwordInput = SaltUtil.getPasswordCrypto(passwordInput, user.getSalt());
-        if(passwordInput.equals(user.getPassword())) {
-            return TransUtil.User2UserInfoDTO(user,200);
-        } else {
-            return TransUtil.User2UserInfoDTO(user,400);
+        if(!passwordInput.equals(user.getPassword())) {
+            throw new RuntimeException("用户名或密码错误");
         }
+        return TransUtil.User2UserInfoDTO(user);
     }
 
     @Override
     public UserDTO getUserInfo(String username) {
         UserMapper userMapper = getBaseMapper();
-        User user = userMapper.SelectByUsername(username);
-        return TransUtil.User2UserInfoDTO(user,200);
+        User user = userMapper.selectByUsername(username);
+        return TransUtil.User2UserInfoDTO(user);
     }
 
     @Override
     public UserDTO updateNickname(String username, String nickname) {
         UserMapper userMapper = getBaseMapper();
-        User user = userMapper.SelectByUsername(username);
-        user.setNickname(nickname);
-        userMapper.updateById(user);
-        return TransUtil.User2UserInfoDTO(user,200);
+        Integer userId = userMapper.selectIdByUsername(username);
+        Boolean success = userMapper.updateUserNickname(userId, nickname);
+        if(!success) {
+            throw new DatabaseException("数据库操作时发生错误");
+        }
+
+        User updatedUser = userMapper.selectById(userId);
+        return TransUtil.User2UserInfoDTO(updatedUser);
     }
 
     @Override
     public UserDTO updateAvatar(String username, String avatar) {
         UserMapper userMapper = getBaseMapper();
-        User user = userMapper.SelectByUsername(username);
-        user.setAvatar(avatar);
-        userMapper.updateById(user);
-        return TransUtil.User2UserInfoDTO(user,200);
+        Integer userId = userMapper.selectIdByUsername(username);
+        Boolean success = userMapper.updateUserAvatar(userId, avatar);
+        if(!success) {
+            throw new DatabaseException("数据库操作时发生错误");
+        }
+
+        User updatedUser = userMapper.selectById(userId);
+        return TransUtil.User2UserInfoDTO(updatedUser);
     }
 
     @Override
     public UserDTO updatePassword(String username, PasswordUpdateDTO dto) {
         UserMapper userMapper = getBaseMapper();
-        User user = userMapper.SelectByUsername(username);
+        User user = userMapper.selectByUsername(username);
         String salt = user.getSalt();
         String oldPasswordInput = SaltUtil.getPasswordCrypto(dto.getOldPassword(), salt);
         String oldPassword = user.getPassword();
-        if(oldPasswordInput.equals(oldPassword)) {
-            String newSalt =  SaltUtil.getSalt();
-            String newPassword =  SaltUtil.getPasswordCrypto(dto.getNewPassword(), newSalt);
-            user.setPassword(newPassword);
-            user.setSalt(newSalt);
-            userMapper.updateById(user);
-            return TransUtil.User2UserInfoDTO(user,200);
-        } else {
+        if(!oldPasswordInput.equals(oldPassword)) {
             throw new RuntimeException("旧密码不正确");
         }
+
+        String newSalt =  SaltUtil.getSalt();
+        String newPassword =  SaltUtil.getPasswordCrypto(dto.getNewPassword(), newSalt);
+        Boolean success = userMapper.updateUserPassword(user.getUserId(),newPassword,newSalt);
+        if(!success) {
+            throw new DatabaseException("数据库操作时发生错误");
+        }
+
+        User updatedUser = userMapper.selectById(user.getUserId());
+        return TransUtil.User2UserInfoDTO(updatedUser);
+    }
+
+    @Override
+    public Boolean isUserExist(Integer userid) {
+        UserMapper userMapper = getBaseMapper();
+        return userMapper.checkByUserId(userid);
     }
 
     @Override
     public Boolean isUserExist(String username) {
         UserMapper userMapper = getBaseMapper();
-        User user = userMapper.SelectByUsername(username);
-        return user != null;
+        return userMapper.checkByUsername(username);
     }
 }
