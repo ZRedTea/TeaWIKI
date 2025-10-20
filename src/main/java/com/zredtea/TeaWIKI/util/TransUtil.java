@@ -1,15 +1,16 @@
 package com.zredtea.TeaWIKI.util;
 
 import com.zredtea.TeaWIKI.DTO.request.RegisterDTO;
+import com.zredtea.TeaWIKI.DTO.response.TeacherDTO;
 import com.zredtea.TeaWIKI.DTO.response.UserDTO;
+import com.zredtea.TeaWIKI.entity.Teacher;
 import com.zredtea.TeaWIKI.entity.User;
 
 import java.util.Date;
 
 public class TransUtil {
-    public static UserDTO User2UserInfoDTO(User user, Integer statuCode){
+    public static UserDTO User2UserInfoDTO(User user){
         UserDTO userDTO = new UserDTO();
-        userDTO.setStatusCode(statuCode);
         userDTO.setUserId(user.getUserId());
         userDTO.setUsername(user.getUsername());
         userDTO.setNickname(user.getNickname());
@@ -20,6 +21,17 @@ public class TransUtil {
 
         return userDTO;
     }
+
+    public static TeacherDTO teacher2TeacherDTO(Teacher teacher){
+        TeacherDTO teacherDTO = new TeacherDTO();
+        teacherDTO.setTeacherId(teacher.getTeacherId());
+        teacherDTO.setTeacherName(teacher.getTeacherName());
+        teacherDTO.setDepartment(teacher.getDepartment());
+        teacherDTO.setCreatedAt(teacher.getCreatedAt());
+        teacherDTO.setUpdatedAt(teacher.getUpdatedAt());
+        return teacherDTO;
+    }
+
 
     public static User RegisterDTO2User(RegisterDTO registerDTO) {
         User user = new User();
