@@ -1,4 +1,4 @@
-package com.zredtea.TeaWIKI.DTO.request;
+package com.zredtea.TeaWIKI.DTO.request.User;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

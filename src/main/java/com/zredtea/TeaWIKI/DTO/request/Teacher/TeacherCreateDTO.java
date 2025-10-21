@@ -1,4 +1,4 @@
-package com.zredtea.TeaWIKI.DTO.request;
+package com.zredtea.TeaWIKI.DTO.request.Teacher;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

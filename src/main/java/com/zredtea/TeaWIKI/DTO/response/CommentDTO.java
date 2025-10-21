@@ -21,5 +21,4 @@ public class CommentDTO {
     private String userAvatar;
 
     private String teacherName;
-    private String teacherSubject;
 }

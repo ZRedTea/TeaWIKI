@@ -1,12 +1,11 @@
 package com.zredtea.TeaWIKI.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.zredtea.TeaWIKI.DTO.request.TeacherCreateDTO;
+import com.zredtea.TeaWIKI.DTO.request.Teacher.TeacherCreateDTO;
 import com.zredtea.TeaWIKI.DTO.response.TeacherDTO;
 import com.zredtea.TeaWIKI.mapper.TeacherMapper;
 import com.zredtea.TeaWIKI.entity.Teacher;
 import com.zredtea.TeaWIKI.service.TeacherService;
-import com.zredtea.TeaWIKI.util.TransUtil;
 import net.sf.jsqlparser.util.validation.metadata.DatabaseException;
 import org.springframework.stereotype.Service;
 
@@ -27,13 +26,34 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper,Teacher>
             throw new DatabaseException("数据库操作时发生错误");
         }
 
-        return TransUtil.teacher2TeacherDTO(teacher);
+        return convertToDTO(teacher);
     }
 
     @Override
     public List<TeacherDTO> getAllTeachers() {
         TeacherMapper teacherMapper = getBaseMapper();
-        List<Teacher> list = teacherMapper.selectAllTeacher();
-        return TransUtil.teacher2TeacherDTO(list);
+        List<Teacher> teachers = teacherMapper.selectAllTeacher();
+        return convertToDTO(teachers);
+    }
+
+    @Override
+    public TeacherDTO convertToDTO(Teacher teacher) {
+        TeacherDTO teacherDTO = new TeacherDTO();
+        teacherDTO.setTeacherId(teacher.getTeacherId());
+        teacherDTO.setTeacherName(teacher.getTeacherName());
+        teacherDTO.setDepartment(teacher.getDepartment());
+        teacherDTO.setCreatedAt(teacher.getCreatedAt());
+        teacherDTO.setUpdatedAt(teacher.getUpdatedAt());
+        return teacherDTO;
+    }
+
+    @Override
+    public List<TeacherDTO> convertToDTO(List<Teacher> teachers) {
+        List<TeacherDTO> teacherDTOs = new ArrayList<>();
+        for (Teacher teacher : teachers) {
+            TeacherDTO teacherDTO = convertToDTO(teacher);
+            teacherDTOs.add(teacherDTO);
+        }
+        return teacherDTOs;
     }
 }

@@ -2,7 +2,7 @@ import com.zredtea.TeaWIKI.TeaWIKIApplication;
 import org.junit.Test;
 
 import com.zredtea.TeaWIKI.service.UserService;
-import com.zredtea.TeaWIKI.DTO.request.UserRegisterDTO;
+import com.zredtea.TeaWIKI.DTO.request.User.UserRegisterDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 

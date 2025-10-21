@@ -1,18 +1,20 @@
 package com.zredtea.TeaWIKI.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.zredtea.TeaWIKI.DTO.request.UserLoginDTO;
-import com.zredtea.TeaWIKI.DTO.request.UserPasswordUpdateDTO;
-import com.zredtea.TeaWIKI.DTO.request.UserRegisterDTO;
+import com.zredtea.TeaWIKI.DTO.request.User.UserLoginDTO;
+import com.zredtea.TeaWIKI.DTO.request.User.UserPasswordUpdateDTO;
+import com.zredtea.TeaWIKI.DTO.request.User.UserRegisterDTO;
 import com.zredtea.TeaWIKI.DTO.response.UserDTO;
 import com.zredtea.TeaWIKI.entity.User;
 import com.zredtea.TeaWIKI.service.UserService;
 
 import com.zredtea.TeaWIKI.mapper.UserMapper;
 import com.zredtea.TeaWIKI.util.SaltUtil;
-import com.zredtea.TeaWIKI.util.TransUtil;
 import net.sf.jsqlparser.util.validation.metadata.DatabaseException;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User>
@@ -20,23 +22,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Override
     public UserDTO register(UserRegisterDTO dto) {
-        User user = TransUtil.RegisterDTO2User(dto);
-        String salt = SaltUtil.getSalt();
-        user.setUsername(dto.getUsername());
-        if(dto.getNickname() != null ) {
-            user.setNickname(dto.getNickname());
-        } else {
-            user.setNickname(dto.getUsername());
-        }
-
-        user.setSalt(salt);
-        user.setPassword(SaltUtil.getPasswordCrypto(dto.getPassword(), salt));
+        UserMapper userMapper = getBaseMapper();
+        User user = convertToEntity(dto);
 
         boolean success = super.save(user);
         if(!success) {
             throw new DatabaseException("数据库操作时发生错误");
         }
-        return TransUtil.User2UserInfoDTO(user);
+
+        return convertToDTO(user);
     }
 
     @Override
@@ -48,40 +42,38 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if(!passwordInput.equals(user.getPassword())) {
             throw new RuntimeException("用户名或密码错误");
         }
-        return TransUtil.User2UserInfoDTO(user);
+        return convertToDTO(user);
     }
 
     @Override
     public UserDTO getUserInfo(String username) {
         UserMapper userMapper = getBaseMapper();
         User user = userMapper.selectByUsername(username);
-        return TransUtil.User2UserInfoDTO(user);
+        return convertToDTO(user);
     }
 
     @Override
     public UserDTO updateNickname(String username, String nickname) {
         UserMapper userMapper = getBaseMapper();
-        Integer userId = userMapper.selectIdByUsername(username);
-        Boolean success = userMapper.updateUserNickname(userId, nickname);
-        if(!success) {
+        User user = userMapper.selectByUsername(username);
+        user.setNickname(nickname);
+        int success = userMapper.updateById(user);
+        if(success <= 0) {
             throw new DatabaseException("数据库操作时发生错误");
         }
-
-        User updatedUser = userMapper.selectById(userId);
-        return TransUtil.User2UserInfoDTO(updatedUser);
+        return convertToDTO(user);
     }
 
     @Override
     public UserDTO updateAvatar(String username, String avatar) {
         UserMapper userMapper = getBaseMapper();
-        Integer userId = userMapper.selectIdByUsername(username);
-        Boolean success = userMapper.updateUserAvatar(userId, avatar);
-        if(!success) {
+        User user = userMapper.selectByUsername(username);
+        user.setAvatar(avatar);
+        int success = userMapper.updateById(user);
+        if(success <= 0) {
             throw new DatabaseException("数据库操作时发生错误");
         }
-
-        User updatedUser = userMapper.selectById(userId);
-        return TransUtil.User2UserInfoDTO(updatedUser);
+        return convertToDTO(user);
     }
 
     @Override
@@ -95,15 +87,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             throw new RuntimeException("旧密码不正确");
         }
 
-        String newSalt =  SaltUtil.getSalt();
-        String newPassword =  SaltUtil.getPasswordCrypto(dto.getNewPassword(), newSalt);
-        Boolean success = userMapper.updateUserPassword(user.getUserId(),newPassword,newSalt);
-        if(!success) {
+        String newSalt = SaltUtil.getSalt();
+        String newPassword = SaltUtil.getPasswordCrypto(dto.getNewPassword(), newSalt);
+        user.setPassword(newPassword);
+        user.setSalt(newSalt);
+        int success = userMapper.updateById(user);
+        if(success <= 0) {
             throw new DatabaseException("数据库操作时发生错误");
         }
 
-        User updatedUser = userMapper.selectById(user.getUserId());
-        return TransUtil.User2UserInfoDTO(updatedUser);
+        return convertToDTO(user);
     }
 
     @Override
@@ -116,5 +109,44 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     public Boolean isUserExist(String username) {
         UserMapper userMapper = getBaseMapper();
         return userMapper.checkByUsername(username);
+    }
+
+    @Override
+    public User convertToEntity(UserRegisterDTO dto) {
+        User user =  new User();
+        String salt = SaltUtil.getSalt();
+
+        user.setUsername(dto.getUsername());
+        if(dto.getNickname() != null ) {
+            user.setNickname(dto.getNickname());
+        } else {
+            user.setNickname(dto.getUsername());
+        }
+
+        user.setSalt(salt);
+        user.setPassword(SaltUtil.getPasswordCrypto(dto.getPassword(), salt));
+        return user;
+    }
+
+    @Override
+    public UserDTO convertToDTO(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUserId(user.getUserId());
+        userDTO.setUsername(user.getUsername());
+        userDTO.setNickname(user.getNickname());
+        userDTO.setAvatar(user.getAvatar());
+        userDTO.setDepartment(user.getDepartment());
+        userDTO.setCreatedAt(user.getCreatedAt());
+        userDTO.setUpdatedAt(user.getUpdatedAt());
+        return userDTO;
+    }
+
+    @Override
+    public List<UserDTO> convertToDTO(List<User> users){
+        List<UserDTO> userDTOs = new ArrayList<>();
+        for(User user : users) {
+            userDTOs.add(convertToDTO(user));
+        }
+        return userDTOs;
     }
 }

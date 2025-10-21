@@ -1,8 +1,8 @@
 package com.zredtea.TeaWIKI.service;
 
-import com.zredtea.TeaWIKI.DTO.request.UserLoginDTO;
-import com.zredtea.TeaWIKI.DTO.request.UserPasswordUpdateDTO;
-import com.zredtea.TeaWIKI.DTO.request.UserRegisterDTO;
+import com.zredtea.TeaWIKI.DTO.request.User.UserLoginDTO;
+import com.zredtea.TeaWIKI.DTO.request.User.UserPasswordUpdateDTO;
+import com.zredtea.TeaWIKI.DTO.request.User.UserRegisterDTO;
 import com.zredtea.TeaWIKI.DTO.response.UserDTO;
 import com.zredtea.TeaWIKI.TeaWIKIApplication;
 import org.junit.jupiter.api.Test;
