@@ -25,6 +25,7 @@ public interface TeacherMapper extends BaseMapper<Teacher> {
      */
     default List<Teacher> selectAllTeacher() {
         LambdaQueryWrapper<Teacher> wrapper = new LambdaQueryWrapper<>();
+        wrapper.orderByDesc(Teacher::getCreatedAt);
         return selectList(wrapper);
     }
 
@@ -38,13 +39,9 @@ public interface TeacherMapper extends BaseMapper<Teacher> {
         return selectList(wrapper);
     }
 
-    /**
-     * 根据教师学院进行模糊查询
-     */
-    default List<Teacher> matchByTeacherDepartment(String department){
+    default Boolean checkByTeacherId(Integer teacherId) {
         LambdaQueryWrapper<Teacher> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Teacher::getDepartment, department);
-        wrapper.orderByDesc(Teacher::getCreatedAt);
-        return selectList(wrapper);
+        wrapper.eq(Teacher::getTeacherId, teacherId);
+        return selectCount(wrapper) > 0;
     }
 }

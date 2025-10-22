@@ -1,4 +1,4 @@
-package com.zredtea.TeaWIKI.handler;
+package com.zredtea.TeaWIKI.common.handler;
 
 import com.zredtea.TeaWIKI.DTO.Result;
 import lombok.extern.slf4j.Slf4j;

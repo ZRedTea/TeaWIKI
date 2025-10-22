@@ -76,6 +76,23 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
         return convertToDTO(comment);
     }
 
+    @Override
+    public List<CommentDTO> searchCommentsByTeacherId(Integer teacherId, String sortType) {
+        CommentMapper commentMapper = getBaseMapper();
+        List<Comment> comments = new ArrayList<>();
+        if(sortType == null || sortType.equals("hot")) {
+            comments = commentMapper.selectCommentsByTeacherId(teacherId,
+                    wrapper -> wrapper.orderByDesc(Comment::getLikes));
+        } else if(sortType.equals("latest")) {
+            comments = commentMapper.selectCommentsByTeacherId(teacherId,
+                    wrapper -> wrapper.orderByDesc(Comment::getCommentTime));
+        } else {
+            throw new RuntimeException("非法参数!");
+        }
+        return convertToDTO(comments);
+
+    }
+
     public Comment convertToEntity(CommentDTO dto) {
         return null;
     }
@@ -137,5 +154,17 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
             CommentDTOs.add(convertToDTO(comment));
         }
         return CommentDTOs;
+    }
+
+    @Override
+    public Boolean isCommentExist(Integer commentId) {
+        CommentMapper commentMapper = getBaseMapper();
+        return commentMapper.checkByCommentId(commentId);
+    }
+
+    @Override
+    public Boolean isCommentExist(Integer userId, Integer teacherId) {
+        CommentMapper commentMapper = getBaseMapper();
+        return commentMapper.checkByUnionId(userId, teacherId);
     }
 }

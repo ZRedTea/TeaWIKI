@@ -30,10 +30,37 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper,Teacher>
     }
 
     @Override
+    public TeacherDTO getTeacherById(Integer teacherId) {
+        TeacherMapper teacherMapper = getBaseMapper();
+        Teacher teacher = teacherMapper.selectById(teacherId);
+        if(teacher == null) {
+            throw new RuntimeException("实体不存在");
+        }
+        return convertToDTO(teacher);
+    }
+
+    @Override
     public List<TeacherDTO> getAllTeachers() {
         TeacherMapper teacherMapper = getBaseMapper();
         List<Teacher> teachers = teacherMapper.selectAllTeacher();
         return convertToDTO(teachers);
+    }
+
+    @Override
+    public List<TeacherDTO> searchTeachersByName(String name) {
+        TeacherMapper teacherMapper = getBaseMapper();
+        List<Teacher> teachers = teacherMapper.matchByTeacherName(name);
+        return convertToDTO(teachers);
+    }
+
+    @Override
+    public List<TeacherDTO> searchTeachersByCourseId(Integer courseId) {
+        return List.of();
+    }
+
+    @Override
+    public List<TeacherDTO> searchTeachersByUnionId(String name, Integer courseId) {
+        return List.of();
     }
 
     @Override
@@ -55,5 +82,11 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper,Teacher>
             teacherDTOs.add(teacherDTO);
         }
         return teacherDTOs;
+    }
+
+    @Override
+    public Boolean isTeacherExist(Integer teacherId) {
+        TeacherMapper teacherMapper = getBaseMapper();
+        return teacherMapper.checkByTeacherId(teacherId);
     }
 }

@@ -111,7 +111,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return userMapper.checkByUsername(username);
     }
 
-    @Override
     public User convertToEntity(UserRegisterDTO dto) {
         User user =  new User();
         String salt = SaltUtil.getSalt();
@@ -128,7 +127,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return user;
     }
 
-    @Override
     public UserDTO convertToDTO(User user) {
         UserDTO userDTO = new UserDTO();
         userDTO.setUserId(user.getUserId());
@@ -141,7 +139,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return userDTO;
     }
 
-    @Override
     public List<UserDTO> convertToDTO(List<User> users){
         List<UserDTO> userDTOs = new ArrayList<>();
         for(User user : users) {

@@ -26,10 +26,10 @@ public interface UserService extends IService<User> {
     Boolean isUserExist(Integer userId);
 
     Boolean isUserExist(String username);
-
-    User convertToEntity(UserRegisterDTO dto);
-
-    UserDTO convertToDTO(User user);
-
-    List<UserDTO> convertToDTO(List<User> users);
+//
+//    User convertToEntity(UserRegisterDTO dto);
+//
+//    UserDTO convertToDTO(User user);
+//
+//    List<UserDTO> convertToDTO(List<User> users);
 }

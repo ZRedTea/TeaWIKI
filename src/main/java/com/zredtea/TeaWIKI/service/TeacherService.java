@@ -10,9 +10,19 @@ import java.util.List;
 public interface TeacherService extends IService<Teacher> {
     TeacherDTO createTeacher(TeacherCreateDTO dto);
 
+    TeacherDTO getTeacherById(Integer teacherId);
+
     List<TeacherDTO> getAllTeachers();
+
+    List<TeacherDTO> searchTeachersByName(String name);
+
+    List<TeacherDTO> searchTeachersByCourseId(Integer courseId);
+
+    List<TeacherDTO> searchTeachersByUnionId(String name, Integer courseId);
 
     TeacherDTO convertToDTO(Teacher teacher);
 
     List<TeacherDTO> convertToDTO(List<Teacher> teachers);
+
+    Boolean isTeacherExist(Integer teacherId);
 }

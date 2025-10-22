@@ -40,10 +40,10 @@ public class UserController {
         return Result.success(result);
     }
 
-    @RequestMapping("/{username}")
+    @GetMapping("/{username}")
     public Result<UserDTO> getUserInfo(@PathVariable String username) {
         if (!userService.isUserExist(username)) {
-            return Result.error(400, "用户不存在");
+            return Result.error(404, "用户不存在");
         }
         UserDTO result = userService.getUserInfo(username);
         return Result.success(result);
@@ -53,7 +53,7 @@ public class UserController {
     public Result<UserDTO> updateNickname(@PathVariable String username,
                                           @RequestParam("nickname") String nickname) {
         if (!userService.isUserExist(username)) {
-            return Result.error(400, "用户不存在");
+            return Result.error(404, "用户不存在");
         }
         UserDTO result = userService.updateNickname(username, nickname);
         return Result.success(result);
@@ -64,7 +64,7 @@ public class UserController {
                                         @RequestParam("avatar") MultipartFile avatar)
                                         throws IOException {
         if (!userService.isUserExist(username)) {
-            return Result.error(400,"用户不存在");
+            return Result.error(404,"用户不存在");
         }
         String avatarURL = FileUploadUtil.uploadAvatar(avatar);
         UserDTO result = userService.updateAvatar(username, avatarURL);
@@ -75,7 +75,7 @@ public class UserController {
     public Result<UserDTO> updatePassword(@PathVariable String username,
                                           @RequestBody @Valid UserPasswordUpdateDTO dto) {
         if (!userService.isUserExist(username)) {
-            return Result.error(400,"用户不存在");
+            return Result.error(404,"用户不存在");
         }
         if (!dto.getOldPassword().equals(dto.getNewPassword())) {
             UserDTO result = userService.updatePassword(username, dto);

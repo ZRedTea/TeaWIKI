@@ -82,5 +82,16 @@ public interface CommentMapper extends BaseMapper<Comment> {
         return selectList(wrapper);
     }
 
+    default Boolean checkByCommentId(Integer commentId) {
+        LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Comment::getCommentId, commentId);
+        return selectCount(wrapper) > 0;
+    }
 
+    default Boolean checkByUnionId(Integer userId, Integer teacherId) {
+        LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Comment::getUserId, userId);
+        wrapper.eq(Comment::getTeacherId, teacherId);
+        return selectCount(wrapper) > 0;
+    }
 }

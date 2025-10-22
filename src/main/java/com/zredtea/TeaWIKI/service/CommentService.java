@@ -18,6 +18,12 @@ public interface CommentService extends IService<Comment> {
 
     CommentDTO getCommentByCommentId(Integer commentId);
 
+    List<CommentDTO> searchCommentsByTeacherId(Integer teacherId, String sortType);
+
+    Boolean isCommentExist(Integer commentId);
+
+    Boolean isCommentExist(Integer userId, Integer teacherId);
+
 //    Comment convertToEntity(CommentDTO dto);
 //    Comment convertToEntity(CommentCommitDTO dto);
 //    Comment convertToEntity(CommentUpdateDTO dto);
