@@ -3,6 +3,9 @@ package com.zredtea.TeaWIKI.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zredtea.TeaWIKI.DTO.request.Teacher.TeacherCreateDTO;
 import com.zredtea.TeaWIKI.DTO.response.TeacherDTO;
+import com.zredtea.TeaWIKI.common.exception.BusinessException;
+import com.zredtea.TeaWIKI.common.exception.ExceptionEnum;
+import com.zredtea.TeaWIKI.common.exception.ServerException;
 import com.zredtea.TeaWIKI.mapper.TeacherMapper;
 import com.zredtea.TeaWIKI.entity.Teacher;
 import com.zredtea.TeaWIKI.service.TeacherService;
@@ -23,7 +26,7 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper,Teacher>
         teacher.setDepartment(dto.getDepartment());
         boolean success = super.save(teacher);
         if(!success) {
-            throw new DatabaseException("数据库操作时发生错误");
+            throw new ServerException(ExceptionEnum.DATABASE_ERROR);
         }
 
         return convertToDTO(teacher);
@@ -34,7 +37,7 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper,Teacher>
         TeacherMapper teacherMapper = getBaseMapper();
         Teacher teacher = teacherMapper.selectById(teacherId);
         if(teacher == null) {
-            throw new RuntimeException("实体不存在");
+            throw new BusinessException(ExceptionEnum.TEACHER_NOT_FOUND);
         }
         return convertToDTO(teacher);
     }

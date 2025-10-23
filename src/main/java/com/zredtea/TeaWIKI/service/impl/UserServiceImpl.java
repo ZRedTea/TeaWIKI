@@ -5,6 +5,9 @@ import com.zredtea.TeaWIKI.DTO.request.User.UserLoginDTO;
 import com.zredtea.TeaWIKI.DTO.request.User.UserPasswordUpdateDTO;
 import com.zredtea.TeaWIKI.DTO.request.User.UserRegisterDTO;
 import com.zredtea.TeaWIKI.DTO.response.UserDTO;
+import com.zredtea.TeaWIKI.common.exception.BusinessException;
+import com.zredtea.TeaWIKI.common.exception.ExceptionEnum;
+import com.zredtea.TeaWIKI.common.exception.ServerException;
 import com.zredtea.TeaWIKI.entity.User;
 import com.zredtea.TeaWIKI.service.UserService;
 
@@ -27,7 +30,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
         boolean success = super.save(user);
         if(!success) {
-            throw new DatabaseException("数据库操作时发生错误");
+            throw new ServerException(ExceptionEnum.DATABASE_ERROR);
         }
 
         return convertToDTO(user);
@@ -40,7 +43,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         String passwordInput = dto.getPassword();
         passwordInput = SaltUtil.getPasswordCrypto(passwordInput, user.getSalt());
         if(!passwordInput.equals(user.getPassword())) {
-            throw new RuntimeException("用户名或密码错误");
+            throw new BusinessException(ExceptionEnum.USER_PWD_WRONG);
         }
         return convertToDTO(user);
     }
@@ -59,7 +62,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         user.setNickname(nickname);
         int success = userMapper.updateById(user);
         if(success <= 0) {
-            throw new DatabaseException("数据库操作时发生错误");
+            throw new ServerException(ExceptionEnum.DATABASE_ERROR);
         }
         return convertToDTO(user);
     }
@@ -71,7 +74,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         user.setAvatar(avatar);
         int success = userMapper.updateById(user);
         if(success <= 0) {
-            throw new DatabaseException("数据库操作时发生错误");
+            throw new ServerException(ExceptionEnum.DATABASE_ERROR);
         }
         return convertToDTO(user);
     }
@@ -84,7 +87,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         String oldPasswordInput = SaltUtil.getPasswordCrypto(dto.getOldPassword(), salt);
         String oldPassword = user.getPassword();
         if(!oldPasswordInput.equals(oldPassword)) {
-            throw new RuntimeException("旧密码不正确");
+            throw new BusinessException(ExceptionEnum.USER_OLD_WRONG);
         }
 
         String newSalt = SaltUtil.getSalt();
@@ -93,7 +96,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         user.setSalt(newSalt);
         int success = userMapper.updateById(user);
         if(success <= 0) {
-            throw new DatabaseException("数据库操作时发生错误");
+            throw new ServerException(ExceptionEnum.DATABASE_ERROR);
         }
 
         return convertToDTO(user);

@@ -5,6 +5,9 @@ import com.zredtea.TeaWIKI.DTO.request.Comment.CommentCommitDTO;
 import com.zredtea.TeaWIKI.DTO.request.Comment.CommentDeleteDTO;
 import com.zredtea.TeaWIKI.DTO.request.Comment.CommentUpdateDTO;
 import com.zredtea.TeaWIKI.DTO.response.CommentDTO;
+import com.zredtea.TeaWIKI.common.exception.BusinessException;
+import com.zredtea.TeaWIKI.common.exception.ExceptionEnum;
+import com.zredtea.TeaWIKI.common.exception.ServerException;
 import com.zredtea.TeaWIKI.entity.Comment;
 import com.zredtea.TeaWIKI.entity.Teacher;
 import com.zredtea.TeaWIKI.entity.User;
@@ -33,7 +36,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
         Comment comment = convertToEntity(dto);
         boolean success = save(comment);
         if(!success) {
-            throw new DatabaseException("数据库操作时发生错误");
+            throw new ServerException(ExceptionEnum.DATABASE_ERROR);
         }
         return convertToDTO(comment);
     }
@@ -43,7 +46,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
         Comment comment = convertToEntity(dto);
         boolean success = updateById(comment);
         if(!success) {
-            throw new DatabaseException("数据库操作时发生错误");
+            throw new ServerException(ExceptionEnum.DATABASE_ERROR);
         }
         return convertToDTO(comment);
     }
@@ -54,15 +57,15 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
         Integer userId = dto.getUserId();
         Comment comment = getById(commentId);
         if(comment == null) {
-            throw new RuntimeException("此评论不存在!");
+            throw new BusinessException(ExceptionEnum.COMMENT_NOT_FOUND);
         }
         if(!comment.getUserId().equals(userId)) {
-            throw new RuntimeException("非法用户!");
+            throw new BusinessException(ExceptionEnum.PERMISSION_ERROR);
         }
         comment.setDeleted(1);
         boolean success = updateById(comment);
         if(!success) {
-            throw new DatabaseException("数据库操作时发生错误!");
+            throw new ServerException(ExceptionEnum.DATABASE_ERROR);
         }
         return convertToDTO(comment);
     }
@@ -71,7 +74,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
     public CommentDTO getCommentByCommentId(Integer commentId) {
         Comment comment = getById(commentId);
         if(comment == null) {
-            throw new RuntimeException("此用户不存在!");
+            throw new BusinessException(ExceptionEnum.COMMENT_NOT_FOUND);
         }
         return convertToDTO(comment);
     }
@@ -87,7 +90,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
             comments = commentMapper.selectCommentsByTeacherId(teacherId,
                     wrapper -> wrapper.orderByDesc(Comment::getCommentTime));
         } else {
-            throw new RuntimeException("非法参数!");
+            throw new BusinessException(ExceptionEnum.ILLEGAL_ARGUMENT);
         }
         return convertToDTO(comments);
 

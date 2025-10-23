@@ -3,6 +3,8 @@ package com.zredtea.TeaWIKI.controller;
 import com.zredtea.TeaWIKI.DTO.Result;
 import com.zredtea.TeaWIKI.DTO.request.Comment.CommentCommitDTO;
 import com.zredtea.TeaWIKI.DTO.response.CommentDTO;
+import com.zredtea.TeaWIKI.common.exception.BusinessException;
+import com.zredtea.TeaWIKI.common.exception.ExceptionEnum;
 import com.zredtea.TeaWIKI.entity.Comment;
 import com.zredtea.TeaWIKI.service.CommentService;
 import com.zredtea.TeaWIKI.service.TeacherService;
@@ -27,15 +29,15 @@ public class CommentController {
     @PostMapping("/commit")
     public Result<CommentDTO> commitComment(@RequestBody CommentCommitDTO dto) {
         if(dto == null) {
-            throw new RuntimeException("dto不存在!");
+            throw new BusinessException(ExceptionEnum.INPUT_IS_NULL);
         }
         Integer userId = dto.getUserId();
         Integer teacherId = dto.getTeacherId();
         if(commentService.isCommentExist(userId, teacherId)) {
-            throw new RuntimeException("评论已存在，请使用修改评论!");
+            throw new BusinessException(ExceptionEnum.COMMENT_HAS_EXIST);
         }
         if(!userService.isUserExist(userId) || !teacherService.isTeacherExist(teacherId)) {
-            throw new RuntimeException("所连接的用户或教师不存在!");
+            throw new BusinessException(ExceptionEnum.COMMENT_CONNECT_NOT_FOUND);
         }
 
         CommentDTO result = commentService.createComment(dto);
