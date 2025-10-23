@@ -48,9 +48,11 @@ public class CommentController {
     public Result<List<CommentDTO>> getAllCommentsByTeacher(@PathVariable Integer teacherId,
                                                             @RequestParam String sortType) {
         if(teacherId == null) {
-            throw new RuntimeException("输入不能为空!");
+            throw new BusinessException(ExceptionEnum.INPUT_IS_NULL);
         }
         List<CommentDTO> result = commentService.searchCommentsByTeacherId(teacherId, sortType);
         return Result.success(result);
     }
+
+
 }

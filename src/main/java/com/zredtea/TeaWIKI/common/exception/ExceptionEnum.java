@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum ExceptionEnum {
 
-    INPUT_IS_NULL("INPUT_001","输入为空!"),
+    INPUT_IS_NULL("INPUT_001","输入不能为空!"),
 
     ILLEGAL_ARGUMENT("PARAM_001", "非法参数!"),
     MISSING_PARAMETER("PARAM_002", "缺少必要参数!"),
