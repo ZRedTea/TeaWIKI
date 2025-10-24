@@ -4,7 +4,11 @@ import com.zredtea.TeaWIKI.DTO.Result;
 import com.zredtea.TeaWIKI.DTO.request.User.UserLoginDTO;
 import com.zredtea.TeaWIKI.DTO.request.User.UserPasswordUpdateDTO;
 import com.zredtea.TeaWIKI.DTO.request.User.UserRegisterDTO;
+import com.zredtea.TeaWIKI.DTO.response.AuthDTO;
 import com.zredtea.TeaWIKI.DTO.response.UserDTO;
+import com.zredtea.TeaWIKI.common.exception.BusinessException;
+import com.zredtea.TeaWIKI.common.exception.ExceptionEnum;
+import com.zredtea.TeaWIKI.costumer.annotation.CurrentUser;
 import com.zredtea.TeaWIKI.service.UserService;
 import com.zredtea.TeaWIKI.util.FileUploadUtil;
 
@@ -23,65 +27,74 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public Result<UserDTO> register(@RequestBody @Valid UserRegisterDTO dto) {
+    public Result<AuthDTO> register(@RequestBody @Valid UserRegisterDTO dto) {
         if (userService.isUserExist(dto.getUsername())) {
-            return Result.error(400, "用户已存在");
+            throw new BusinessException(ExceptionEnum.USER_HAS_EXIST);
         }
-        UserDTO result = userService.register(dto);
+        AuthDTO result = userService.register(dto);
         return Result.success(result);
     }
 
     @PostMapping("/login")
-    public Result<UserDTO> login(@RequestBody @Valid UserLoginDTO dto) {
+    public Result<AuthDTO> login(@RequestBody @Valid UserLoginDTO dto) {
         if (!userService.isUserExist(dto.getUsername())) {
-            return Result.error(400, "用户不存在");
+            throw new BusinessException(ExceptionEnum.USER_NOT_FOUND);
         }
-        UserDTO result = userService.login(dto);
+        AuthDTO result = userService.login(dto);
+        return Result.success(result);
+    }
+
+    @PostMapping("/logout")
+    public Result<UserDTO> logout(@RequestBody @Valid UserLoginDTO dto) {
+        if (!userService.isUserExist(dto.getUsername())) {
+            throw new BusinessException(ExceptionEnum.USER_NOT_FOUND);
+        }
+        UserDTO result = userService.logout(dto.getUsername());
         return Result.success(result);
     }
 
     @GetMapping("/{username}")
     public Result<UserDTO> getUserInfo(@PathVariable String username) {
         if (!userService.isUserExist(username)) {
-            return Result.error(404, "用户不存在");
+            throw new BusinessException(ExceptionEnum.USER_NOT_FOUND);
         }
         UserDTO result = userService.getUserInfo(username);
         return Result.success(result);
     }
 
-    @PutMapping("/{username}/nickname")
-    public Result<UserDTO> updateNickname(@PathVariable String username,
+    @PutMapping("/profile/nickname")
+    public Result<UserDTO> updateNickname(@CurrentUser Integer userId,
                                           @RequestParam("nickname") String nickname) {
-        if (!userService.isUserExist(username)) {
-            return Result.error(404, "用户不存在");
+        if (!userService.isUserExist(userId)) {
+            throw new BusinessException(ExceptionEnum.USER_NOT_FOUND);
         }
-        UserDTO result = userService.updateNickname(username, nickname);
+        UserDTO result = userService.updateNickname(userId, nickname);
         return Result.success(result);
     }
 
-    @PutMapping("/{username}/avatar")
-    public Result<UserDTO> updateAvatar(@PathVariable String username,
+    @PutMapping("/profile/avatar")
+    public Result<UserDTO> updateAvatar(@CurrentUser Integer userId,
                                         @RequestParam("avatar") MultipartFile avatar)
                                         throws IOException {
-        if (!userService.isUserExist(username)) {
-            return Result.error(404,"用户不存在");
+        if (!userService.isUserExist(userId)) {
+            throw new BusinessException(ExceptionEnum.USER_NOT_FOUND);
         }
         String avatarURL = FileUploadUtil.uploadAvatar(avatar);
-        UserDTO result = userService.updateAvatar(username, avatarURL);
+        UserDTO result = userService.updateAvatar(userId, avatarURL);
         return Result.success(result);
     }
 
-    @PutMapping("/{username}/password")
-    public Result<UserDTO> updatePassword(@PathVariable String username,
+    @PutMapping("/profile/password")
+    public Result<UserDTO> updatePassword(@CurrentUser Integer userId,
                                           @RequestBody @Valid UserPasswordUpdateDTO dto) {
-        if (!userService.isUserExist(username)) {
-            return Result.error(404,"用户不存在");
+        if (!userService.isUserExist(userId)) {
+            throw new BusinessException(ExceptionEnum.USER_NOT_FOUND);
         }
         if (!dto.getOldPassword().equals(dto.getNewPassword())) {
-            UserDTO result = userService.updatePassword(username, dto);
+            UserDTO result = userService.updatePassword(userId, dto);
             return Result.success(result);
         } else {
-            return Result.error(400,"旧密码与新密码不能相同");
+            throw new BusinessException(ExceptionEnum.USER_OLD_WRONG);
         }
     }
 }

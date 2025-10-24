@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zredtea.TeaWIKI.DTO.request.User.UserLoginDTO;
 import com.zredtea.TeaWIKI.DTO.request.User.UserPasswordUpdateDTO;
 import com.zredtea.TeaWIKI.DTO.request.User.UserRegisterDTO;
+import com.zredtea.TeaWIKI.DTO.response.AuthDTO;
 import com.zredtea.TeaWIKI.DTO.response.UserDTO;
+import com.zredtea.TeaWIKI.common.exception.AuthException;
 import com.zredtea.TeaWIKI.common.exception.BusinessException;
 import com.zredtea.TeaWIKI.common.exception.ExceptionEnum;
 import com.zredtea.TeaWIKI.common.exception.ServerException;
@@ -12,8 +14,8 @@ import com.zredtea.TeaWIKI.entity.User;
 import com.zredtea.TeaWIKI.service.UserService;
 
 import com.zredtea.TeaWIKI.mapper.UserMapper;
+import com.zredtea.TeaWIKI.util.JWTUtil;
 import com.zredtea.TeaWIKI.util.SaltUtil;
-import net.sf.jsqlparser.util.validation.metadata.DatabaseException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,8 +25,11 @@ import java.util.List;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User>
                              implements UserService {
 
+    private UserMapper userMapper;
+    private JWTUtil jwtUtil;
+
     @Override
-    public UserDTO register(UserRegisterDTO dto) {
+    public AuthDTO register(UserRegisterDTO dto) {
         UserMapper userMapper = getBaseMapper();
         User user = convertToEntity(dto);
 
@@ -33,11 +38,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             throw new ServerException(ExceptionEnum.DATABASE_ERROR);
         }
 
-        return convertToDTO(user);
+        String token = jwtUtil.generateToken(user.getUserId(), user.getUsername());
+        UserDTO userDTO = convertToDTO(user);
+        return new AuthDTO(userDTO,token,jwtUtil.getExpiration());
     }
 
     @Override
-    public UserDTO login(UserLoginDTO dto) {
+    public AuthDTO login(UserLoginDTO dto) {
         UserMapper userMapper = getBaseMapper();
         User user = userMapper.selectByUsername(dto.getUsername());
         String passwordInput = dto.getPassword();
@@ -45,7 +52,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if(!passwordInput.equals(user.getPassword())) {
             throw new BusinessException(ExceptionEnum.USER_PWD_WRONG);
         }
-        return convertToDTO(user);
+
+        String token = jwtUtil.generateToken(user.getUserId(), user.getUsername());
+        UserDTO userDTO = convertToDTO(user);
+        return new AuthDTO(userDTO,token,jwtUtil.getExpiration());
+    }
+
+    @Override
+    public UserDTO logout(String token) {
+        Integer userId = jwtUtil.getUserIdFromToken(token);
+        if (userId == null) {
+            throw new BusinessException(ExceptionEnum.USER_NOT_FOUND);
+        }
+        if (jwtUtil.validateToken(token)) {
+            throw new AuthException(ExceptionEnum.TOKEN_NOT_EQUAL);
+        }
+        jwtUtil.invalidateToken(token);
+        return new UserDTO();
     }
 
     @Override
@@ -56,9 +79,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public UserDTO updateNickname(String username, String nickname) {
+    public UserDTO getProfile(Integer userId) {
+        return convertToDTO(userMapper.selectById(userId));
+    }
+
+    @Override
+    public UserDTO updateNickname(Integer userId, String nickname) {
         UserMapper userMapper = getBaseMapper();
-        User user = userMapper.selectByUsername(username);
+        User user = userMapper.selectById(userId);
         user.setNickname(nickname);
         int success = userMapper.updateById(user);
         if(success <= 0) {
@@ -68,9 +96,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public UserDTO updateAvatar(String username, String avatar) {
+    public UserDTO updateAvatar(Integer userId, String avatar) {
         UserMapper userMapper = getBaseMapper();
-        User user = userMapper.selectByUsername(username);
+        User user = userMapper.selectById(userId);
         user.setAvatar(avatar);
         int success = userMapper.updateById(user);
         if(success <= 0) {
@@ -80,9 +108,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public UserDTO updatePassword(String username, UserPasswordUpdateDTO dto) {
+    public UserDTO updatePassword(Integer userId, UserPasswordUpdateDTO dto) {
         UserMapper userMapper = getBaseMapper();
-        User user = userMapper.selectByUsername(username);
+        User user = userMapper.selectById(userId);
         String salt = user.getSalt();
         String oldPasswordInput = SaltUtil.getPasswordCrypto(dto.getOldPassword(), salt);
         String oldPassword = user.getPassword();
