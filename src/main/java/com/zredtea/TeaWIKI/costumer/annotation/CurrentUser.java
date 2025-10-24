@@ -1,4 +1,4 @@
-package com.zredtea.TeaWIKI.annotation;
+package com.zredtea.TeaWIKI.costumer.annotation;
 
 import java.lang.annotation.*;
 
