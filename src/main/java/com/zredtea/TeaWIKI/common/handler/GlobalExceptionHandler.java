@@ -1,6 +1,7 @@
 package com.zredtea.TeaWIKI.common.handler;
 
 import com.zredtea.TeaWIKI.DTO.Result;
+import com.zredtea.TeaWIKI.common.exception.AuthException;
 import com.zredtea.TeaWIKI.common.exception.BusinessException;
 import com.zredtea.TeaWIKI.common.exception.ServerException;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,16 @@ public class GlobalExceptionHandler {
     public Result<Object> handleServerException(ServerException e) {
         log.warn("抛出ServerException:{}", e.getMessage());
         return Result.error(500, e.getMessage());
+    }
+
+    /**
+     * 处理认证错误抛出的AuthException
+     * 返回403
+     */
+    @ExceptionHandler(AuthException.class)
+    public Result<Object> handleAuthException(AuthException e) {
+        log.warn("抛出AuthException:{}", e.getMessage());
+        return Result.error(403, e.getMessage());
     }
 
     /**

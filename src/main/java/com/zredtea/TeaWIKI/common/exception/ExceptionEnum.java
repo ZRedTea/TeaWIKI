@@ -11,6 +11,9 @@ public enum ExceptionEnum {
     MISSING_PARAMETER("PARAM_002", "缺少必要参数!"),
     PARAM_VALIDATION_FAILED("PARAM_003", "参数校验失败!"),
 
+    TOKEN_NOT_LOGIN("AUTH_001","用户未登录!"),
+    TOKEN_NOT_EQUAL("AUTH_002","cookie不匹配!"),
+
     USER_NOT_FOUND("USER_001","该用户不存在!"),
     USER_HAS_EXIST("USER_002","该用户已存在!"),
     USER_PWD_WRONG("USER_003","用户名或密码错误!"),
