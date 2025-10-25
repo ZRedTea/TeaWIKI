@@ -10,11 +10,11 @@ import com.zredtea.TeaWIKI.entity.Comment;
 import java.util.List;
 
 public interface CommentService extends IService<Comment> {
-    CommentDTO createComment(CommentCommitDTO dto);
+    CommentDTO createComment(CommentCommitDTO dto, Integer userId);
 
-    CommentDTO updateComment(CommentUpdateDTO dto);
+    CommentDTO updateComment(CommentUpdateDTO dto, Integer userId);
 
-    CommentDTO deleteComment(CommentDeleteDTO dto);
+    boolean deleteComment(Integer commentId, Integer userId);
 
     CommentDTO getCommentByCommentId(Integer commentId);
 

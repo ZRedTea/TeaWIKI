@@ -32,8 +32,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
     private TeacherService teacherService;
 
     @Override
-    public CommentDTO createComment(CommentCommitDTO dto) {
+    public CommentDTO createComment(CommentCommitDTO dto, Integer userId) {
         Comment comment = convertToEntity(dto);
+        comment.setUserId(userId);
         boolean success = save(comment);
         if(!success) {
             throw new ServerException(ExceptionEnum.DATABASE_ERROR);
@@ -42,7 +43,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
     }
 
     @Override
-    public CommentDTO updateComment(CommentUpdateDTO dto) {
+    public CommentDTO updateComment(CommentUpdateDTO dto, Integer userId) {
         Comment comment = convertToEntity(dto);
         boolean success = updateById(comment);
         if(!success) {
@@ -52,22 +53,15 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
     }
 
     @Override
-    public CommentDTO deleteComment(CommentDeleteDTO dto) {
-        Integer commentId = dto.getCommentId();
-        Integer userId = dto.getUserId();
+    public boolean deleteComment(Integer commentId, Integer userId) {
         Comment comment = getById(commentId);
-        if(comment == null) {
-            throw new BusinessException(ExceptionEnum.COMMENT_NOT_FOUND);
-        }
-        if(!comment.getUserId().equals(userId)) {
-            throw new BusinessException(ExceptionEnum.PERMISSION_ERROR);
-        }
         comment.setDeleted(1);
-        boolean success = updateById(comment);
+        boolean success = save(comment);
         if(!success) {
             throw new ServerException(ExceptionEnum.DATABASE_ERROR);
         }
-        return convertToDTO(comment);
+
+        return true;
     }
 
     @Override
@@ -106,7 +100,6 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
         }
 
         Comment entity = new Comment();
-        entity.setUserId(dto.getUserId());
         entity.setTeacherId(dto.getTeacherId());
         entity.setRating(dto.getRating());
         if(dto.getContent() != null) {

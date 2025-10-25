@@ -2,20 +2,23 @@ package com.zredtea.TeaWIKI.controller;
 
 import com.zredtea.TeaWIKI.DTO.Result;
 import com.zredtea.TeaWIKI.DTO.request.Comment.CommentCommitDTO;
+import com.zredtea.TeaWIKI.DTO.request.Comment.CommentUpdateDTO;
 import com.zredtea.TeaWIKI.DTO.response.CommentDTO;
 import com.zredtea.TeaWIKI.common.exception.BusinessException;
 import com.zredtea.TeaWIKI.common.exception.ExceptionEnum;
+import com.zredtea.TeaWIKI.costumer.annotation.CurrentUser;
 import com.zredtea.TeaWIKI.entity.Comment;
 import com.zredtea.TeaWIKI.service.CommentService;
 import com.zredtea.TeaWIKI.service.TeacherService;
 import com.zredtea.TeaWIKI.service.UserService;
+import net.bytebuddy.asm.MemberSubstitution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/comment/")
+@RequestMapping("/comment")
 public class CommentController {
     @Autowired
     private CommentService commentService;
@@ -27,20 +30,52 @@ public class CommentController {
     private TeacherService teacherService;
 
     @PostMapping("/commit")
-    public Result<CommentDTO> commitComment(@RequestBody CommentCommitDTO dto) {
+    public Result<CommentDTO> commitComment(@CurrentUser Integer userId,
+                                            @RequestBody CommentCommitDTO dto) {
         if(dto == null) {
             throw new BusinessException(ExceptionEnum.INPUT_IS_NULL);
         }
-        Integer userId = dto.getUserId();
         Integer teacherId = dto.getTeacherId();
         if(commentService.isCommentExist(userId, teacherId)) {
             throw new BusinessException(ExceptionEnum.COMMENT_HAS_EXIST);
         }
-        if(!userService.isUserExist(userId) || !teacherService.isTeacherExist(teacherId)) {
+        if(!teacherService.isTeacherExist(teacherId)) {
             throw new BusinessException(ExceptionEnum.COMMENT_CONNECT_NOT_FOUND);
         }
 
-        CommentDTO result = commentService.createComment(dto);
+        CommentDTO result = commentService.createComment(dto, userId);
+        return Result.success(result);
+    }
+
+    @PutMapping("/update")
+    public Result<CommentDTO> updateComment(@CurrentUser Integer userId,
+                                            @RequestBody CommentUpdateDTO dto) {
+        if(dto == null) {
+            throw new BusinessException(ExceptionEnum.INPUT_IS_NULL);
+        }
+        if(!commentService.isCommentExist(dto.getCommentId())) {
+            throw new BusinessException(ExceptionEnum.COMMENT_NOT_FOUND);
+        }
+        if(!commentService.getById(dto.getCommentId()).getUserId().
+                equals(userId)) {
+            throw new BusinessException(ExceptionEnum.PERMISSION_ERROR);
+        }
+        CommentDTO result = commentService.updateComment(dto, userId);
+        return Result.success(result);
+    }
+
+    @DeleteMapping("/delete")
+    public Result<Boolean> deleteComment(@CurrentUser Integer userId,
+                                         @RequestParam Integer commentId) {
+        if(!commentService.isCommentExist(commentId)) {
+            throw new BusinessException(ExceptionEnum.COMMENT_NOT_FOUND);
+        }
+        if(!commentService.getById(commentId).getUserId()
+                .equals(userId)) {
+            throw new BusinessException(ExceptionEnum.PERMISSION_ERROR);
+        }
+
+        Boolean result = commentService.deleteComment(commentId, userId);
         return Result.success(result);
     }
 

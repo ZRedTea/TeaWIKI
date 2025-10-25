@@ -6,8 +6,6 @@ import lombok.Data;
 
 @Data
 public class CommentCommitDTO {
-    @NotBlank
-    private Integer userId;
     private String username;
 
     @NotBlank
