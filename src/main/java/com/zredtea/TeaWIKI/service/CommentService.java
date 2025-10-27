@@ -2,7 +2,6 @@ package com.zredtea.TeaWIKI.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.zredtea.TeaWIKI.DTO.request.Comment.CommentCommitDTO;
-import com.zredtea.TeaWIKI.DTO.request.Comment.CommentDeleteDTO;
 import com.zredtea.TeaWIKI.DTO.request.Comment.CommentUpdateDTO;
 import com.zredtea.TeaWIKI.DTO.response.CommentDTO;
 import com.zredtea.TeaWIKI.entity.Comment;

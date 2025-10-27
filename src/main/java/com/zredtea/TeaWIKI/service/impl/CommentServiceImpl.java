@@ -2,7 +2,6 @@ package com.zredtea.TeaWIKI.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zredtea.TeaWIKI.DTO.request.Comment.CommentCommitDTO;
-import com.zredtea.TeaWIKI.DTO.request.Comment.CommentDeleteDTO;
 import com.zredtea.TeaWIKI.DTO.request.Comment.CommentUpdateDTO;
 import com.zredtea.TeaWIKI.DTO.response.CommentDTO;
 import com.zredtea.TeaWIKI.common.exception.BusinessException;
@@ -15,7 +14,6 @@ import com.zredtea.TeaWIKI.mapper.CommentMapper;
 import com.zredtea.TeaWIKI.service.CommentService;
 import com.zredtea.TeaWIKI.service.TeacherService;
 import com.zredtea.TeaWIKI.service.UserService;
-import net.sf.jsqlparser.util.validation.metadata.DatabaseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
