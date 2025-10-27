@@ -6,8 +6,6 @@ import lombok.Data;
 
 @Data
 public class CommentCommitDTO {
-    private String username;
-
     @NotBlank
     private Integer teacherId;
     private String content;

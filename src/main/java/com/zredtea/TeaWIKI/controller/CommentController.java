@@ -7,11 +7,10 @@ import com.zredtea.TeaWIKI.DTO.response.CommentDTO;
 import com.zredtea.TeaWIKI.common.exception.BusinessException;
 import com.zredtea.TeaWIKI.common.exception.ExceptionEnum;
 import com.zredtea.TeaWIKI.costumer.annotation.CurrentUser;
-import com.zredtea.TeaWIKI.entity.Comment;
 import com.zredtea.TeaWIKI.service.CommentService;
 import com.zredtea.TeaWIKI.service.TeacherService;
 import com.zredtea.TeaWIKI.service.UserService;
-import net.bytebuddy.asm.MemberSubstitution;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +30,7 @@ public class CommentController {
 
     @PostMapping("/commit")
     public Result<CommentDTO> commitComment(@CurrentUser Integer userId,
-                                            @RequestBody CommentCommitDTO dto) {
+                                            @RequestBody @Valid CommentCommitDTO dto) {
         if(dto == null) {
             throw new BusinessException(ExceptionEnum.INPUT_IS_NULL);
         }
@@ -49,7 +48,7 @@ public class CommentController {
 
     @PutMapping("/update")
     public Result<CommentDTO> updateComment(@CurrentUser Integer userId,
-                                            @RequestBody CommentUpdateDTO dto) {
+                                            @RequestBody @Valid CommentUpdateDTO dto) {
         if(dto == null) {
             throw new BusinessException(ExceptionEnum.INPUT_IS_NULL);
         }
@@ -88,6 +87,4 @@ public class CommentController {
         List<CommentDTO> result = commentService.searchCommentsByTeacherId(teacherId, sortType);
         return Result.success(result);
     }
-
-
 }

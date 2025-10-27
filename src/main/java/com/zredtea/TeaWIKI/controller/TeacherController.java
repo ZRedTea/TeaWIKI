@@ -3,8 +3,8 @@ package com.zredtea.TeaWIKI.controller;
 import com.zredtea.TeaWIKI.DTO.Result;
 import com.zredtea.TeaWIKI.DTO.request.Teacher.TeacherCreateDTO;
 import com.zredtea.TeaWIKI.DTO.response.TeacherDTO;
-import com.zredtea.TeaWIKI.entity.Teacher;
 import com.zredtea.TeaWIKI.service.TeacherService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +18,7 @@ public class TeacherController {
     private TeacherService teacherService;
 
     @PostMapping("/create")
-    public Result<TeacherDTO> createTeacher(@RequestBody TeacherCreateDTO dto) {
+    public Result<TeacherDTO> createTeacher(@RequestBody @Valid TeacherCreateDTO dto) {
         if(dto == null) {
             return Result.error(400,"dto不存在!");
         }
