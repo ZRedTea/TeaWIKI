@@ -1,8 +1,11 @@
 package com.zredtea.TeaWIKI.costumer.resolver;
 
+import com.zredtea.TeaWIKI.DTO.response.UserDTO;
 import com.zredtea.TeaWIKI.common.exception.AuthException;
 import com.zredtea.TeaWIKI.common.exception.ExceptionEnum;
 import com.zredtea.TeaWIKI.costumer.annotation.CurrentUser;
+import com.zredtea.TeaWIKI.entity.User;
+import com.zredtea.TeaWIKI.service.UserService;
 import com.zredtea.TeaWIKI.util.JWTUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,14 +20,24 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @Component
 public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolver {
     private final JWTUtil jwtUtil;
+    private final UserService userService;
 
-    public CurrentUserArgumentResolver(JWTUtil jwtUtil) {
+    public CurrentUserArgumentResolver(JWTUtil jwtUtil, UserService userService) {
         this.jwtUtil = jwtUtil;
+        this.userService = userService;
     }
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.getParameterType().equals(CurrentUser.class);
+        if (!parameter.hasParameterAnnotation(CurrentUser.class)) {
+            return false;
+        }
+
+        Class<?> parameterType = parameter.getParameterType();
+        return Integer.class.equals(parameterType) ||
+                String.class.equals(parameterType) ||
+                User.class.equals(parameterType) ||
+                UserDTO.class.equals(parameterType);
     }
 
     @Override
@@ -36,8 +49,14 @@ public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolve
         String token = getTokenFromRequest(request);
 
         if(token != null && jwtUtil.validateToken(token)) {
-            Integer userId = jwtUtil.getUserIdFromToken(token);
-            return userId;
+            Class<?> paramaterClass = parameter.getParameterType();
+            if(paramaterClass.equals(Integer.class)) {
+                return jwtUtil.getUserIdFromToken(token);
+            }else if(paramaterClass.equals(String.class)) {
+                return jwtUtil.getUsernameFromToken(token);
+            }else if(paramaterClass.equals(User.class)) {
+                return userService.getById(jwtUtil.getUserIdFromToken(token));
+            }
         }
 
         CurrentUser currentUserAnnotation = parameter.getParameterAnnotation(CurrentUser.class);
