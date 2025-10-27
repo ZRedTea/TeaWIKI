@@ -25,6 +25,9 @@ public enum ExceptionEnum {
     COMMENT_HAS_EXIST("COMMENT_002","该评论已存在!"),
     COMMENT_CONNECT_NOT_FOUND("COMMENT_003","该评论所连接的教师或用户不存在!"),
 
+    CVOTE_NOT_FOUND("CVOTE_001","尚未点赞或点踩过!"),
+    CVOTE_HAS_LIKED("CVOTE_002","已经点过赞了!"),
+
     PERMISSION_ERROR("PERMISSION_001","非法用户!"),
 
     DATABASE_ERROR("DB_001","数据库操作时发生错误!");

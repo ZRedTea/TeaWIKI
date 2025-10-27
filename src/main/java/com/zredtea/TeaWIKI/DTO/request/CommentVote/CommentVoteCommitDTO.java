@@ -1,8 +1,10 @@
 package com.zredtea.TeaWIKI.DTO.request.CommentVote;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 
-public class CommentVoteCommit {
+@Data
+public class CommentVoteCommitDTO {
     @NotBlank
     private Integer commentId;
     @NotBlank

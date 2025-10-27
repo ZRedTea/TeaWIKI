@@ -18,10 +18,10 @@ public class CommentVote {
     private Integer userId;
 
     @TableField("vote_type")
-    private Integer voteType;
+    private String voteType;
 
     @TableField(value = "created_at", fill = FieldFill.INSERT)
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     @TableField(value = "updated_at", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updatedAt;
