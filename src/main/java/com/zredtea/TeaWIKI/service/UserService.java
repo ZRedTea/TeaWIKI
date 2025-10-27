@@ -31,6 +31,8 @@ public interface UserService extends IService<User> {
     Boolean isUserExist(Integer userId);
 
     Boolean isUserExist(String username);
+
+    String getUsernameByUserId(Integer userId);
 //
 //    User convertToEntity(UserRegisterDTO dto);
 //

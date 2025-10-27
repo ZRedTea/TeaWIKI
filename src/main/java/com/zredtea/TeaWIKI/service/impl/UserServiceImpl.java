@@ -142,6 +142,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return userMapper.checkByUsername(username);
     }
 
+    @Override
+    public String getUsernameByUserId(Integer userId) {
+        return getById(userId).getUsername();
+    }
+
     public User convertToEntity(UserRegisterDTO dto) {
         User user =  new User();
         String salt = SaltUtil.getSalt();
