@@ -18,7 +18,7 @@ public class CommentVoteServiceImpl extends ServiceImpl<CommentVoteMapper, Comme
     private CommentVoteMapper commentVoteMapper;
 
     @Override
-    public boolean voteComment(Integer userId, CommentVoteCommitDTO dto) {
+    public boolean commitVote(Integer userId, CommentVoteCommitDTO dto) {
         CommentVote commentVote = convertToEntity(dto);
         commentVote.setUserId(userId);
         boolean success = save(commentVote);

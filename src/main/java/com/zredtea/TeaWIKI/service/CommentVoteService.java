@@ -5,7 +5,7 @@ import com.zredtea.TeaWIKI.DTO.request.CommentVote.CommentVoteCommitDTO;
 import com.zredtea.TeaWIKI.entity.CommentVote;
 
 public interface CommentVoteService extends IService<CommentVote> {
-    boolean voteComment(Integer userId, CommentVoteCommitDTO dto);
+    boolean commitVote(Integer userId, CommentVoteCommitDTO dto);
 
     boolean cancelVote(Integer userId, Integer commentId);
 

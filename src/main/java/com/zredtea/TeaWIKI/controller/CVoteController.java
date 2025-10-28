@@ -2,12 +2,9 @@ package com.zredtea.TeaWIKI.controller;
 
 import com.zredtea.TeaWIKI.DTO.Result;
 import com.zredtea.TeaWIKI.DTO.request.CommentVote.CommentVoteCommitDTO;
-import com.zredtea.TeaWIKI.DTO.response.CommentVoteDTO;
 import com.zredtea.TeaWIKI.common.exception.BusinessException;
 import com.zredtea.TeaWIKI.common.exception.ExceptionEnum;
 import com.zredtea.TeaWIKI.costumer.annotation.CurrentUser;
-import com.zredtea.TeaWIKI.entity.CommentVote;
-import com.zredtea.TeaWIKI.mapper.CommentVoteMapper;
 import com.zredtea.TeaWIKI.service.CommentService;
 import com.zredtea.TeaWIKI.service.CommentVoteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +28,7 @@ public class CVoteController {
         if(!dto.getVoteType().equals("like") && !dto.getVoteType().equals("dislike")) {
             throw new BusinessException((ExceptionEnum.ILLEGAL_ARGUMENT));
         }
-        boolean result = commentVoteService.voteComment(userId,dto);
+        boolean result = commentVoteService.commitVote(userId,dto);
         return Result.success(result);
     }
 
