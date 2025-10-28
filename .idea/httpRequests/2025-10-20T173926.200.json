@@ -1,0 +1,6 @@
+{
+  "code": 400,
+  "message": "Result Maps collection does not contain value for java.lang.Integer",
+  "data": null,
+  "timestamp": 1760953166195
+}

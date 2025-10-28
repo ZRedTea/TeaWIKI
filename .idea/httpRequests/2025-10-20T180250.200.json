@@ -1,0 +1,14 @@
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "userId": 1,
+    "username": "test1",
+    "nickname": "test1",
+    "avatar": null,
+    "department": null,
+    "createdAt": "2025-10-20T18:02:50.0239208",
+    "updatedAt": "2025-10-20T18:02:50.0239208"
+  },
+  "timestamp": 1760954570054
+}
