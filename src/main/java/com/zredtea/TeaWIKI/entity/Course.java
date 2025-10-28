@@ -12,6 +12,9 @@ public class Course {
     @TableId(value="course_id", type=IdType.AUTO)
     private Integer courseId;
 
+    @TableField("course_code")
+    private String courseCode;
+
     @TableField("course_name")
     private String courseName;
 

@@ -55,6 +55,7 @@ CREATE TABLE comment_votes (
 CREATE TABLE courses (
     course_id   INT          AUTO_INCREMENT PRIMARY KEY,
     course_name VARCHAR(32) NOT NULL,
+    course_code VARCHAR(16) NOT NULL,
     course_type VARCHAR(32),
     department  VARCHAR(32),
     created_at  DATETIME     DEFAULT CURRENT_TIMESTAMP,
