@@ -4,7 +4,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4c4d9b32-61f9-4256-9fe9-1222b005c404" name="更改" comment="增加评论投票相关逻辑" />
+    <list default="true" id="4c4d9b32-61f9-4256-9fe9-1222b005c404" name="更改" comment="修改gitignore">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zredtea/TeaWIKI/DTO/request/Course/CourseCreateDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zredtea/TeaWIKI/DTO/request/Course/CourseDeleteDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zredtea/TeaWIKI/DTO/request/Course/CourseUpdateDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zredtea/TeaWIKI/DTO/request/CourseTeacher/CourseTeacherCommitDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zredtea/TeaWIKI/DTO/request/CourseTeacher/CourseTeacherDeleteDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zredtea/TeaWIKI/DTO/response/CourseDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zredtea/TeaWIKI/DTO/response/CourseTeacherDTo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zredtea/TeaWIKI/entity/CourseTeacher.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zredtea/TeaWIKI/mapper/CourseMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zredtea/TeaWIKI/mapper/CourseTeacherMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zredtea/TeaWIKI/service/CourseService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zredtea/TeaWIKI/service/CourseTeacherService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zredtea/TeaWIKI/service/impl/CourseServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zredtea/TeaWIKI/service/impl/CourseTeacherServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/init.sql" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/init.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zredtea/TeaWIKI/common/exception/ExceptionEnum.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zredtea/TeaWIKI/common/exception/ExceptionEnum.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zredtea/TeaWIKI/controller/CVoteController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zredtea/TeaWIKI/controller/CVoteController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zredtea/TeaWIKI/entity/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zredtea/TeaWIKI/entity/Course.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zredtea/TeaWIKI/service/CommentVoteService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zredtea/TeaWIKI/service/CommentVoteService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zredtea/TeaWIKI/service/impl/CommentVoteServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zredtea/TeaWIKI/service/impl/CommentVoteServiceImpl.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -134,6 +156,7 @@
       <workItem from="1761548386515" duration="4445000" />
       <workItem from="1761562894484" duration="3501000" />
       <workItem from="1761618424241" duration="2937000" />
+      <workItem from="1761634959957" duration="5270000" />
     </task>
     <task id="LOCAL-00001" summary="创建 TeacherMapper.java">
       <option name="closed" value="true" />
@@ -343,14 +366,29 @@
       <option name="project" value="LOCAL" />
       <updated>1761622534427</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="增加评论投票相关逻辑">
+      <option name="closed" value="true" />
+      <created>1761635189321</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1761635189321</updated>
+    </task>
+    <task id="LOCAL-00028" summary="修改gitignore">
+      <option name="closed" value="true" />
+      <created>1761635244206</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1761635244206</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="创建 TeacherMapper.java" />
     <MESSAGE value="重构 用户管理各部分" />
     <MESSAGE value="增加 控制器层全局异常处理" />
     <MESSAGE value="添加 教师部分DTO" />
@@ -375,6 +413,7 @@
     <MESSAGE value="给控制器层增加validation，删除DTO中无用逻辑" />
     <MESSAGE value="修改CurrentUser的参数解析器以适配不同类型参数" />
     <MESSAGE value="增加评论投票相关逻辑" />
-    <option name="LAST_COMMIT_MESSAGE" value="增加评论投票相关逻辑" />
+    <MESSAGE value="修改gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改gitignore" />
   </component>
 </project>

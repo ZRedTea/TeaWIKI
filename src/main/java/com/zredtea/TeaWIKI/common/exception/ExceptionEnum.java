@@ -28,6 +28,9 @@ public enum ExceptionEnum {
     CVOTE_NOT_FOUND("CVOTE_001","尚未点赞或点踩过!"),
     CVOTE_HAS_LIKED("CVOTE_002","已经点过赞了!"),
 
+    CTCON_NOT_FOUND("CTCON_001","该教师未教授该课程!"),
+    CTCON_HAS_EXIST("CTCON_002","该教师已教授该课程!"),
+
     PERMISSION_ERROR("PERMISSION_001","非法用户!"),
 
     DATABASE_ERROR("DB_001","数据库操作时发生错误!");
