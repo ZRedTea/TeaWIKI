@@ -12,6 +12,7 @@ import com.zredtea.TeaWIKI.entity.Teacher;
 import com.zredtea.TeaWIKI.entity.User;
 import com.zredtea.TeaWIKI.mapper.CommentMapper;
 import com.zredtea.TeaWIKI.service.CommentService;
+import com.zredtea.TeaWIKI.service.CommentVoteService;
 import com.zredtea.TeaWIKI.service.TeacherService;
 import com.zredtea.TeaWIKI.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
     private UserService userService;
     @Autowired
     private TeacherService teacherService;
+    @Autowired
+    private CommentVoteService commentVoteService;
 
     @Override
     public CommentDTO createComment(CommentCommitDTO dto, Integer userId) {
@@ -132,6 +135,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
         dto.setTeacherId(comment.getTeacherId());
         dto.setRating(comment.getRating());
         dto.setContent(comment.getContent());
+        dto.setLikes(commentVoteService.countLikes(comment.getCommentId()));
+        dto.setDislikes(commentVoteService.countDislikes(comment.getCommentId()));
 
         User conUser = userService.getById(comment.getUserId());
         Teacher conTeacher = teacherService.getById(comment.getTeacherId());

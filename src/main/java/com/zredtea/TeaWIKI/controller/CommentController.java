@@ -8,6 +8,7 @@ import com.zredtea.TeaWIKI.common.exception.BusinessException;
 import com.zredtea.TeaWIKI.common.exception.ExceptionEnum;
 import com.zredtea.TeaWIKI.costumer.annotation.CurrentUser;
 import com.zredtea.TeaWIKI.service.CommentService;
+import com.zredtea.TeaWIKI.service.CommentVoteService;
 import com.zredtea.TeaWIKI.service.TeacherService;
 import com.zredtea.TeaWIKI.service.UserService;
 import jakarta.validation.Valid;
@@ -27,6 +28,9 @@ public class CommentController {
 
     @Autowired
     private TeacherService teacherService;
+
+    @Autowired
+    private CommentVoteService commentVoteService;
 
     @PostMapping("/commit")
     public Result<CommentDTO> commitComment(@CurrentUser Integer userId,

@@ -8,9 +8,11 @@ import com.zredtea.TeaWIKI.common.exception.ExceptionEnum;
 import com.zredtea.TeaWIKI.entity.CommentVote;
 import com.zredtea.TeaWIKI.mapper.CommentVoteMapper;
 import com.zredtea.TeaWIKI.service.CommentVoteService;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+@Service
 public class CommentVoteServiceImpl extends ServiceImpl<CommentVoteMapper, CommentVote>
                                     implements CommentVoteService {
     private CommentVoteMapper commentVoteMapper;
