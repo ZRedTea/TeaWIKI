@@ -20,6 +20,10 @@ public interface CourseService extends IService<Course> {
 
     CourseDTO getCourseByName(String courseName);
 
+    List<CourseDTO> getAllCourses();
+
+    List<CourseDTO> getCourseByTeacherId(Integer teacherId);
+
     List<CourseDTO> matchCourseByName(String courseName);
 
     boolean isCourseExist(Integer courseId);

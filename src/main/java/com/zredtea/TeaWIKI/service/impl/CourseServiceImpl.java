@@ -10,6 +10,7 @@ import com.zredtea.TeaWIKI.common.exception.ExceptionEnum;
 import com.zredtea.TeaWIKI.entity.Course;
 import com.zredtea.TeaWIKI.mapper.CourseMapper;
 import com.zredtea.TeaWIKI.service.CourseService;
+import com.zredtea.TeaWIKI.service.CourseTeacherService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,7 +19,12 @@ import java.util.List;
 @Service
 public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course>
                                implements CourseService {
+    private final CourseTeacherService courseTeacherService;
     private CourseMapper courseMapper;
+
+    public CourseServiceImpl(CourseTeacherService courseTeacherService) {
+        this.courseTeacherService = courseTeacherService;
+    }
 
     @Override
     public CourseDTO createCourse(CourseCreateDTO dto) {
@@ -65,6 +71,18 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course>
     @Override
     public List<CourseDTO> matchCourseByName(String courseName) {
         List<Course> courses = courseMapper.matchByName(courseName);
+        return convertToDTO(courses);
+    }
+
+    @Override
+    public List<CourseDTO> getCourseByTeacherId(Integer teacherId) {
+        List<Course> courses = courseTeacherService.getCoursesByTeacherId(teacherId);
+        return convertToDTO(courses);
+    }
+
+    @Override
+    public List<CourseDTO> getAllCourses() {
+        List<Course> courses = courseMapper.selectAllCourses();
         return convertToDTO(courses);
     }
 

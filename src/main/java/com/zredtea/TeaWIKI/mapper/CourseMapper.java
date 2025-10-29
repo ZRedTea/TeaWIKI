@@ -26,4 +26,12 @@ public interface CourseMapper extends BaseMapper<Course> {
         queryWrapper.eq(Course::getCourseName,courseName);
         return selectList(queryWrapper);
     }
+
+    /**
+     * 获取所有课程
+     */
+    default List<Course> selectAllCourses() {
+        LambdaQueryWrapper<Course> queryWrapper = new LambdaQueryWrapper<>();
+        return selectList(queryWrapper);
+    }
 }
