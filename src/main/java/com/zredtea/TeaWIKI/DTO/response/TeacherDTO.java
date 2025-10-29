@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 public class TeacherDTO {
     private Integer teacherId;
     private String teacherName;
+    private Double rating;
     private String department;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

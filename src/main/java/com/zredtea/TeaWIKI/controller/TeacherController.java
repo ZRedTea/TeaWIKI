@@ -27,18 +27,8 @@ public class TeacherController {
     }
 
     @GetMapping("/teachers")
-    public Result<List<TeacherDTO>> getAllTeachers(@RequestParam(required = false) String name,
-                                                   @RequestParam(required = false) Integer courseId) {
-        List<TeacherDTO> result = new ArrayList<>();
-        if(name != null && courseId != null) {
-            result = teacherService.searchTeachersByUnionId(name,courseId);
-        } else if(name != null) {
-            result = teacherService.searchTeachersByName(name);
-        } else if(courseId != null) {
-            result = teacherService.searchTeachersByCourseId(courseId);
-        } else {
-            result = teacherService.getAllTeachers();
-        }
+    public Result<List<TeacherDTO>> getAllTeachers() {
+        List<TeacherDTO> result = teacherService.getAllTeachers();
         return Result.success(result);
     }
 

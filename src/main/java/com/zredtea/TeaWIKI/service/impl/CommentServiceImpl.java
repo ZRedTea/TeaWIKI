@@ -25,6 +25,8 @@ import java.util.List;
 @Service
 public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
                                 implements CommentService {
+    private CommentMapper commentMapper;
+
     @Autowired
     private UserService userService;
     @Autowired
@@ -89,6 +91,19 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
         }
         return convertToDTO(comments);
 
+    }
+
+    @Override
+    public Double getRatingByTeacherId(Integer teacherId) {
+        List<Comment> comments = commentMapper.selectCommentsByTeacherId(teacherId,null);
+        if(comments == null) {
+            return 0.0;
+        }
+        Double rating = 0.0;
+        for(Comment comment : comments) {
+            rating += comment.getRating();
+        }
+        return rating / comments.size();
     }
 
     public Comment convertToEntity(CommentDTO dto) {

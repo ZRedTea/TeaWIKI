@@ -8,8 +8,11 @@ import com.zredtea.TeaWIKI.common.exception.ExceptionEnum;
 import com.zredtea.TeaWIKI.common.exception.ServerException;
 import com.zredtea.TeaWIKI.mapper.TeacherMapper;
 import com.zredtea.TeaWIKI.entity.Teacher;
+import com.zredtea.TeaWIKI.service.CommentService;
+import com.zredtea.TeaWIKI.service.CourseTeacherService;
 import com.zredtea.TeaWIKI.service.TeacherService;
 import net.sf.jsqlparser.util.validation.metadata.DatabaseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,6 +21,11 @@ import java.util.List;
 @Service
 public class TeacherServiceImpl extends ServiceImpl<TeacherMapper,Teacher>
                                 implements TeacherService {
+    @Autowired
+    private CommentService commentService;
+    @Autowired
+    private CourseTeacherService courseTeacherService;
+
     @Override
     public TeacherDTO createTeacher(TeacherCreateDTO dto) {
         TeacherMapper teacherMapper = getBaseMapper();
@@ -57,13 +65,9 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper,Teacher>
     }
 
     @Override
-    public List<TeacherDTO> searchTeachersByCourseId(Integer courseId) {
-        return List.of();
-    }
-
-    @Override
-    public List<TeacherDTO> searchTeachersByUnionId(String name, Integer courseId) {
-        return List.of();
+    public List<TeacherDTO> getTeachersByCourseId(Integer courseId) {
+        List<Teacher> teachers = courseTeacherService.getTeachersByCourseId(courseId);
+        return convertToDTO(teachers);
     }
 
     @Override
@@ -71,6 +75,7 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper,Teacher>
         TeacherDTO teacherDTO = new TeacherDTO();
         teacherDTO.setTeacherId(teacher.getTeacherId());
         teacherDTO.setTeacherName(teacher.getTeacherName());
+        teacherDTO.setRating(commentService.getRatingByTeacherId(teacher.getTeacherId()));
         teacherDTO.setDepartment(teacher.getDepartment());
         teacherDTO.setCreatedAt(teacher.getCreatedAt());
         teacherDTO.setUpdatedAt(teacher.getUpdatedAt());

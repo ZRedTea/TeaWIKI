@@ -16,9 +16,7 @@ public interface TeacherService extends IService<Teacher> {
 
     List<TeacherDTO> searchTeachersByName(String name);
 
-    List<TeacherDTO> searchTeachersByCourseId(Integer courseId);
-
-    List<TeacherDTO> searchTeachersByUnionId(String name, Integer courseId);
+    List<TeacherDTO> getTeachersByCourseId(Integer courseId);
 
     TeacherDTO convertToDTO(Teacher teacher);
 

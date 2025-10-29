@@ -19,6 +19,8 @@ public interface CommentService extends IService<Comment> {
 
     List<CommentDTO> searchCommentsByTeacherId(Integer teacherId, String sortType);
 
+    Double getRatingByTeacherId(Integer teacherId);
+
     Boolean isCommentExist(Integer commentId);
 
     Boolean isCommentExist(Integer userId, Integer teacherId);
