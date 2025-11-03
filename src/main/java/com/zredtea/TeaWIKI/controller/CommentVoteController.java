@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/commentVote/")
-public class CVoteController {
+public class CommentVoteController {
     @Autowired
     private CommentVoteService commentVoteService;
 
