@@ -16,6 +16,8 @@ import com.zredtea.TeaWIKI.service.UserService;
 import com.zredtea.TeaWIKI.mapper.UserMapper;
 import com.zredtea.TeaWIKI.util.JWTUtil;
 import com.zredtea.TeaWIKI.util.SaltUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
                              implements UserService {
 
     private UserMapper userMapper;
+    @Autowired
     private JWTUtil jwtUtil;
 
     @Override

@@ -11,6 +11,9 @@ import com.zredtea.TeaWIKI.entity.Comment;
 import com.zredtea.TeaWIKI.entity.Teacher;
 import com.zredtea.TeaWIKI.entity.User;
 import com.zredtea.TeaWIKI.mapper.CommentMapper;
+import com.zredtea.TeaWIKI.mapper.CommentVoteMapper;
+import com.zredtea.TeaWIKI.mapper.TeacherMapper;
+import com.zredtea.TeaWIKI.mapper.UserMapper;
 import com.zredtea.TeaWIKI.service.CommentService;
 import com.zredtea.TeaWIKI.service.CommentVoteService;
 import com.zredtea.TeaWIKI.service.TeacherService;
@@ -28,11 +31,11 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
     private CommentMapper commentMapper;
 
     @Autowired
-    private UserService userService;
+    private UserMapper userMapper;
     @Autowired
-    private TeacherService teacherService;
+    private TeacherMapper teacherMapper;
     @Autowired
-    private CommentVoteService commentVoteService;
+    private CommentVoteMapper commentVoteMapper;
 
     @Override
     public CommentDTO createComment(CommentCommitDTO dto, Integer userId) {
@@ -150,11 +153,11 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
         dto.setTeacherId(comment.getTeacherId());
         dto.setRating(comment.getRating());
         dto.setContent(comment.getContent());
-        dto.setLikes(commentVoteService.countLikes(comment.getCommentId()));
-        dto.setDislikes(commentVoteService.countDislikes(comment.getCommentId()));
+        dto.setLikes(commentVoteMapper.countLikesByCommentId(comment.getCommentId()));
+        dto.setDislikes(commentVoteMapper.countDislikesByCommentId(comment.getCommentId()));
 
-        User conUser = userService.getById(comment.getUserId());
-        Teacher conTeacher = teacherService.getById(comment.getTeacherId());
+        User conUser = userMapper.selectById(comment.getUserId());
+        Teacher conTeacher = teacherMapper.selectById(comment.getTeacherId());
         dto.setUserName(conUser.getNickname());
         dto.setUserAvatar(conUser.getAvatar());
 

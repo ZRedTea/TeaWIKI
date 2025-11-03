@@ -2,10 +2,15 @@ package com.zredtea.TeaWIKI.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zredtea.TeaWIKI.DTO.request.Teacher.TeacherCreateDTO;
+import com.zredtea.TeaWIKI.DTO.response.CommentDTO;
 import com.zredtea.TeaWIKI.DTO.response.TeacherDTO;
 import com.zredtea.TeaWIKI.common.exception.BusinessException;
 import com.zredtea.TeaWIKI.common.exception.ExceptionEnum;
 import com.zredtea.TeaWIKI.common.exception.ServerException;
+import com.zredtea.TeaWIKI.entity.Comment;
+import com.zredtea.TeaWIKI.entity.CourseTeacher;
+import com.zredtea.TeaWIKI.mapper.CommentMapper;
+import com.zredtea.TeaWIKI.mapper.CourseTeacherMapper;
 import com.zredtea.TeaWIKI.mapper.TeacherMapper;
 import com.zredtea.TeaWIKI.entity.Teacher;
 import com.zredtea.TeaWIKI.service.CommentService;
@@ -22,9 +27,11 @@ import java.util.List;
 public class TeacherServiceImpl extends ServiceImpl<TeacherMapper,Teacher>
                                 implements TeacherService {
     @Autowired
-    private CommentService commentService;
+    private CommentMapper commentMapper;
     @Autowired
-    private CourseTeacherService courseTeacherService;
+    private CourseTeacherMapper courseTeacherMapper;
+    @Autowired
+    private TeacherMapper teacherMapper;
 
     @Override
     public TeacherDTO createTeacher(TeacherCreateDTO dto) {
@@ -66,7 +73,12 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper,Teacher>
 
     @Override
     public List<TeacherDTO> getTeachersByCourseId(Integer courseId) {
-        List<Teacher> teachers = courseTeacherService.getTeachersByCourseId(courseId);
+        List<CourseTeacher> courseTeachers = courseTeacherMapper.selectAllByCourseId(courseId);
+        List<Teacher> teachers = new ArrayList<>();
+        for(CourseTeacher courseTeacher : courseTeachers) {
+            Teacher teacher = teacherMapper.selectById(courseTeacher.getTeacherId());
+            teachers.add(teacher);
+        }
         return convertToDTO(teachers);
     }
 
@@ -75,7 +87,13 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper,Teacher>
         TeacherDTO teacherDTO = new TeacherDTO();
         teacherDTO.setTeacherId(teacher.getTeacherId());
         teacherDTO.setTeacherName(teacher.getTeacherName());
-        teacherDTO.setRating(commentService.getRatingByTeacherId(teacher.getTeacherId()));
+        // 处理评分统计业务逻辑
+        List<Comment> comments = commentMapper.selectCommentsByTeacherId(teacher.getTeacherId(),null);
+        Double rating = 0.0D;
+        for(Comment comment : comments) {
+            rating += comment.getRating();
+        }
+        teacherDTO.setRating(rating / comments.size());
         teacherDTO.setDepartment(teacher.getDepartment());
         teacherDTO.setCreatedAt(teacher.getCreatedAt());
         teacherDTO.setUpdatedAt(teacher.getUpdatedAt());

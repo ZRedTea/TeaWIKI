@@ -8,6 +8,7 @@ import com.zredtea.TeaWIKI.common.exception.ExceptionEnum;
 import com.zredtea.TeaWIKI.entity.Course;
 import com.zredtea.TeaWIKI.entity.CourseTeacher;
 import com.zredtea.TeaWIKI.entity.Teacher;
+import com.zredtea.TeaWIKI.mapper.CourseMapper;
 import com.zredtea.TeaWIKI.mapper.CourseTeacherMapper;
 import com.zredtea.TeaWIKI.mapper.TeacherMapper;
 import com.zredtea.TeaWIKI.service.CourseService;
@@ -24,9 +25,9 @@ public class CourseTeacherServiceImpl extends ServiceImpl<CourseTeacherMapper, C
 
     private CourseTeacherMapper courseTeacherMapper;
 
-    private TeacherService teacherService;
+    private TeacherMapper teacherMapper;
 
-    private CourseService courseService;
+    private CourseMapper courseMapper;
 
     @Override
     public boolean commitCTConnect(CourseTeacherCommitDTO dto) {
@@ -53,7 +54,7 @@ public class CourseTeacherServiceImpl extends ServiceImpl<CourseTeacherMapper, C
         List<CourseTeacher> CTConnects = courseTeacherMapper.selectAllByCourseId(courseId);
         List<Teacher> teachers = new ArrayList<>();
         for(CourseTeacher entity : CTConnects) {
-            Teacher teacher = teacherService.getById(entity.getTeacherId());
+            Teacher teacher = teacherMapper.selectById(entity.getTeacherId());
             teachers.add(teacher);
         }
         return teachers;
@@ -64,7 +65,7 @@ public class CourseTeacherServiceImpl extends ServiceImpl<CourseTeacherMapper, C
         List<CourseTeacher> CTConnects = courseTeacherMapper.selectAllByTeacherId(teacherId);
         List<Course> courses = new ArrayList<>();
         for(CourseTeacher entity : CTConnects) {
-            Course course = courseService.getById(entity.getCourseId());
+            Course course = courseMapper.selectById(entity.getCourseId());
             courses.add(course);
         }
         return courses;
