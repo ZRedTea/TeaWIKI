@@ -1,0 +1,10 @@
+@token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4IiwidXNlcm5hbWUiOiJ0ZXN0VXNlcl8xIiwiaWF0IjoxNzY0NTg4NjMwLCJleHAiOjE3NjQ2NzUwMzB9.qMVSdZvEbisc4DvYimebRUQtQjIsdhyTQcRng4RDGgw
+POST http://localhost:8080/api/comment/commit
+Content-Type: application/json
+Cookie: access_token={{token}}
+
+{
+  "teacherId": 1,
+  "content": "很不错",
+  "rating": 5.0
+}

@@ -1,0 +1,9 @@
+@token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4IiwidXNlcm5hbWUiOiJ0ZXN0VXNlcl8xIiwiaWF0IjoxNzY0NTg4NjMwLCJleHAiOjE3NjQ2NzUwMzB9.qMVSdZvEbisc4DvYimebRUQtQjIsdhyTQcRng4RDGgw
+
+DELETE http://localhost:8080/api/commentVote/cancel
+Content-Type: application/json
+Cookie: access_token={{token}}
+
+{
+    "commentId" : 1
+}

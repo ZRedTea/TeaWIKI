@@ -1,0 +1,7 @@
+POST http://localhost:8080/api/teacher/create
+Content-Type: application/json
+
+{
+  "teacherName": "胡建华",
+  "department": "工学部"
+}

@@ -1,0 +1,8 @@
+@token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4IiwidXNlcm5hbWUiOiJ0ZXN0VXNlcl8xIiwiaWF0IjoxNzY0NTg4NjMwLCJleHAiOjE3NjQ2NzUwMzB9.qMVSdZvEbisc4DvYimebRUQtQjIsdhyTQcRng4RDGgw
+PUT http://localhost:8080/api/user/profile/nickname
+Content-Type: application/json
+Cookie: access_token={{token}}
+
+{
+  "nickname" : "测试1"
+}

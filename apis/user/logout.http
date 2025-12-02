@@ -1,0 +1,3 @@
+POST http://localhost:8080/api/user/logout
+Content-Type: application/json
+Cookie: access_token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3IiwidXNlcm5hbWUiOiJ1c2VyMSIsImlhdCI6MTc2NDU4Nzc0MCwiZXhwIjoxNzY0Njc0MTQwfQ.wI9K4oypC3EBKMDLZZA01c48Fd3HAMeUBSkoS-eqHnY
